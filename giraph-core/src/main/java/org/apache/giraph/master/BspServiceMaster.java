@@ -108,6 +108,7 @@ import org.json.JSONObject;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.mortbay.log.Log;
 
 /**
  * ZooKeeper-based implementation of {@link CentralizedServiceMaster}.
@@ -922,6 +923,7 @@ public class BspServiceMaster<I extends WritableComparable,
         globalStats.addMessageBytesCount(
           workerFinishedInfoObj.getLong(
               JSONOBJ_NUM_MESSAGE_BYTES_KEY));
+        globalStats.setCheckpointStart(workerFinishedInfoObj.getLong("starttime"));
         if (conf.metricsEnabled() &&
             workerFinishedInfoObj.has(JSONOBJ_METRICS_KEY)) {
           WorkerSuperstepMetrics workerMetrics = new WorkerSuperstepMetrics();
@@ -1637,6 +1639,7 @@ public class BspServiceMaster<I extends WritableComparable,
     // If the master is halted or all the vertices voted to halt and there
     // are no more messages in the system, stop the computation
     GlobalStats globalStats = aggregateWorkerStats(getSuperstep());
+    System.out.println("master: starttime from worker: "+globalStats.getCheckpointStart());
     if (masterCompute.isHalted() ||
         (globalStats.getFinishedVertexCount() ==
         globalStats.getVertexCount() &&
@@ -1672,6 +1675,8 @@ public class BspServiceMaster<I extends WritableComparable,
     //Signal workers that we want to checkpoint
     checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
     globalStats.setCheckpointStatus(checkpointStatus);
+    System.out.println("master:checkpointstart: "+globalStats.getCheckpointStart());
+    LOG.info("master: 1st checkpoint start: "+globalStats.getCheckpointStart());
     // Let everyone know the aggregated application state through the
     // superstep finishing znode.
     String superstepFinishedNode =

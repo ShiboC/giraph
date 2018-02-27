@@ -184,6 +184,7 @@ public class BspServiceWorker<I extends WritableComparable,
 
   /** InputSplit handlers used in INPUT_SUPERSTEP */
   private WorkerInputSplitsHandler inputSplitsHandler;
+  public long starttime=0;
 
   /** Memory observer */
   private final MemoryObserver memoryObserver;
@@ -904,6 +905,7 @@ else[HADOOP_NON_SECURE]*/
     JSONObject workerFinishedInfoObj = new JSONObject();
     try {
       workerFinishedInfoObj.put(JSONOBJ_NUM_MESSAGES_KEY, workerSentMessages);
+      workerFinishedInfoObj.put("starttime", starttime);
       workerFinishedInfoObj.put(JSONOBJ_NUM_MESSAGE_BYTES_KEY,
         workerSentMessageBytes);
       workerFinishedInfoObj.put(JSONOBJ_METRICS_KEY,
@@ -1357,7 +1359,7 @@ else[HADOOP_NON_SECURE]*/
         numPartitions);
 
     getPartitionStore().startIteration();
-
+    getWorkerInfo().getHostnameId();
     final CompressionCodec codec =
         new CompressionCodecFactory(getConfiguration())
             .getCodec(new Path(
@@ -1365,6 +1367,15 @@ else[HADOOP_NON_SECURE]*/
                     .get(getConfiguration())));
 
     long t0 = System.currentTimeMillis();
+    starttime=t0;
+    System.out.println("superstep:"+getSuperstep()+" workerid: "+getWorkerInfo().getTaskId()+", starttime: "+starttime);
+//    GlobalStats globalStats=getGlobalStats();
+//    System.out.println("worker before:checkpointstart: "+globalStats.getCheckpointStart());
+//    if(globalStats.getCheckpointStart()<t0){
+//      globalStats.setCheckpointStart(t0);
+//      System.out.println("worker after:checkpointstart: "+globalStats.getCheckpointStart());
+//      LOG.info("worker: 1st checkpoint start: "+globalStats.getCheckpointStart());
+//    }
 
     CallableFactory<Void> callableFactory = new CallableFactory<Void>() {
       @Override
@@ -1410,7 +1421,7 @@ else[HADOOP_NON_SECURE]*/
     ProgressableUtils.getResultsWithNCallables(callableFactory, numThreads,
         "checkpoint-vertices-%d", getContext());
 
-    LOG.info("Save checkpoint in " + (System.currentTimeMillis() - t0) +
+    LOG.info("taskid: "+getWorkerInfo().getTaskId()+" Save checkpoint in " + (System.currentTimeMillis() - t0) +
         " ms, using " + numThreads + " threads");
   }
 
@@ -1748,7 +1759,6 @@ else[HADOOP_NON_SECURE]*/
       memoryObserver.callGc();
       foundEvent = true;
     }
-
     return foundEvent;
   }
 

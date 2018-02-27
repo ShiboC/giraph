@@ -54,7 +54,10 @@ public class GlobalStats implements Writable {
    */
   private CheckpointStatus checkpointStatus =
       CheckpointStatus.NONE;
-
+  /**
+   * checkpoint time
+   * */
+  private long checkpointStart=0;
   /**
    * Add the stats of a partition to the global stats.
    *
@@ -101,6 +104,10 @@ public class GlobalStats implements Writable {
   public long getOocLoadBytesCount() {
     return oocLoadBytesCount;
   }
+
+  public long getCheckpointStart(){return checkpointStart;}
+  public void setCheckpointStart(long value){checkpointStart=value;}
+
 
   public CheckpointStatus getCheckpointStatus() {
     return checkpointStatus;
@@ -164,6 +171,7 @@ public class GlobalStats implements Writable {
     messageBytesCount = input.readLong();
     oocLoadBytesCount = input.readLong();
     oocStoreBytesCount = input.readLong();
+    checkpointStart=input.readLong();
     lowestGraphPercentageInMemory = input.readInt();
     haltComputation = input.readBoolean();
     if (input.readBoolean()) {
@@ -171,6 +179,7 @@ public class GlobalStats implements Writable {
     } else {
       checkpointStatus = null;
     }
+
   }
 
   @Override
@@ -182,9 +191,12 @@ public class GlobalStats implements Writable {
     output.writeLong(messageBytesCount);
     output.writeLong(oocLoadBytesCount);
     output.writeLong(oocStoreBytesCount);
+    output.writeLong(checkpointStart);
     output.writeInt(lowestGraphPercentageInMemory);
     output.writeBoolean(haltComputation);
     output.writeBoolean(checkpointStatus != null);
+
+
     if (checkpointStatus != null) {
       output.writeInt(checkpointStatus.ordinal());
     }
@@ -196,6 +208,6 @@ public class GlobalStats implements Writable {
         finishedVertexCount + ",edges=" + edgeCount + ",msgCount=" +
         messageCount + ",msgBytesCount=" +
           messageBytesCount + ",haltComputation=" + haltComputation +
-        ", checkpointStatus=" + checkpointStatus + ')';
+        ", checkpointStatus=" + checkpointStatus +", checkpointStart="+checkpointStart+ ')';
   }
 }

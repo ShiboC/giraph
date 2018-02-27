@@ -70,6 +70,7 @@ public class GiraphRunner implements Tool {
     if (null == getConf()) { // for YARN profile
       conf = new Configuration();
     }
+ //   conf.set("giraph.checkpointFrequency","1");
     GiraphConfiguration giraphConf = new GiraphConfiguration(getConf());
     CommandLine cmd = ConfigurationUtils.parseArgs(giraphConf, args);
     if (null == cmd) {
