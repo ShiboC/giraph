@@ -1676,7 +1676,7 @@ public class BspServiceMaster<I extends WritableComparable,
     checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
     globalStats.setCheckpointStatus(checkpointStatus);
     System.out.println("master:checkpointstart: "+globalStats.getCheckpointStart());
-    LOG.info("master: 1st checkpoint start: "+globalStats.getCheckpointStart());
+    LOG.info("master:checkpoint start: "+globalStats.getCheckpointStart());
     // Let everyone know the aggregated application state through the
     // superstep finishing znode.
     String superstepFinishedNode =

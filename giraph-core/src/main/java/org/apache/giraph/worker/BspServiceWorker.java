@@ -185,7 +185,7 @@ public class BspServiceWorker<I extends WritableComparable,
   /** InputSplit handlers used in INPUT_SUPERSTEP */
   private WorkerInputSplitsHandler inputSplitsHandler;
   public long starttime=0;
-
+  public long endtime=0;
   /** Memory observer */
   private final MemoryObserver memoryObserver;
 
@@ -1420,9 +1420,11 @@ else[HADOOP_NON_SECURE]*/
 
     ProgressableUtils.getResultsWithNCallables(callableFactory, numThreads,
         "checkpoint-vertices-%d", getContext());
-
-    LOG.info("taskid: "+getWorkerInfo().getTaskId()+" Save checkpoint in " + (System.currentTimeMillis() - t0) +
+    Long t1=System.currentTimeMillis();
+    endtime=t1;
+    LOG.info("taskid: "+getWorkerInfo().getTaskId()+" Save checkpoint in " + (t1 - t0) +
         " ms, using " + numThreads + " threads");
+
   }
 
   /**
