@@ -122,7 +122,8 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
             Class<? extends Computation> computationClass =
                 bspServiceMaster.getMasterCompute().getComputation();
             superstepState = bspServiceMaster.coordinateSuperstep();
-            long superstepMillis = System.currentTimeMillis() -
+            long endSuperstepMillis=System.currentTimeMillis();
+            long superstepMillis = endSuperstepMillis -
                 startSuperstepMillis;
             superstepSecsMap.put(cachedSuperstep,
                 superstepMillis / 1000.0d);
@@ -134,6 +135,7 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
                   " and is now on superstep " +
                   bspServiceMaster.getSuperstep());
             }
+            System.out.println("coordination of superstep,"+cachedSuperstep+",master,start/end,"+startSuperstepMillis+","+endSuperstepMillis);
             if (superstepCounterOn) {
               String computationName = (computationClass == null) ?
                   null : computationClass.getSimpleName();

@@ -190,7 +190,7 @@ public class BspServiceMaster<I extends WritableComparable,
   private CheckpointStatus checkpointStatus;
   /** Checks if checkpointing supported */
   private final CheckpointSupportedChecker checkpointSupportedChecker;
-
+  public long sumHistAvgstarttime=0;
   /**
    * Constructor for setting up the master.
    *
@@ -908,10 +908,12 @@ public class BspServiceMaster<I extends WritableComparable,
     }
 
     AggregatedMetrics aggregatedMetrics = new AggregatedMetrics();
-
+    int counter=0;
+    long tempstarttime=0;
     for (String finishedPath : workerFinishedPathList) {
       String hostnamePartitionId = FilenameUtils.getName(finishedPath);
       JSONObject workerFinishedInfoObj = null;
+
       try {
         byte [] zkData =
             getZkExt().getData(finishedPath, false, null);
@@ -924,6 +926,8 @@ public class BspServiceMaster<I extends WritableComparable,
           workerFinishedInfoObj.getLong(
               JSONOBJ_NUM_MESSAGE_BYTES_KEY));
         globalStats.setCheckpointStart(workerFinishedInfoObj.getLong("starttime"));
+        counter++;
+        tempstarttime+=globalStats.getCheckpointStart();
         if (conf.metricsEnabled() &&
             workerFinishedInfoObj.has(JSONOBJ_METRICS_KEY)) {
           WorkerSuperstepMetrics workerMetrics = new WorkerSuperstepMetrics();
@@ -958,7 +962,7 @@ public class BspServiceMaster<I extends WritableComparable,
             "aggregateWorkerStats: IOException", e);
       }
     }
-
+    sumHistAvgstarttime+=tempstarttime/counter;
     allPartitionStatsList.clear();
     Iterable<PartitionStats> statsList = globalCommHandler.getAllPartitionStats(
         workerFinishedPathList.size(), getContext());
@@ -1639,7 +1643,7 @@ public class BspServiceMaster<I extends WritableComparable,
     // If the master is halted or all the vertices voted to halt and there
     // are no more messages in the system, stop the computation
     GlobalStats globalStats = aggregateWorkerStats(getSuperstep());
-    System.out.println("master: starttime from worker: "+globalStats.getCheckpointStart());
+   // System.out.println("master: starttime from worker: "+globalStats.getCheckpointStart());
     if (masterCompute.isHalted() ||
         (globalStats.getFinishedVertexCount() ==
         globalStats.getVertexCount() &&
@@ -1675,8 +1679,10 @@ public class BspServiceMaster<I extends WritableComparable,
     //Signal workers that we want to checkpoint
     checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
     globalStats.setCheckpointStatus(checkpointStatus);
-    System.out.println("master:checkpointstart: "+globalStats.getCheckpointStart());
+  //  System.out.println("master:checkpointstart: "+globalStats.getCheckpointStart());
     LOG.info("master:checkpoint start: "+globalStats.getCheckpointStart());
+  //  System.out.println("master:sumHistAvgstarttime: "+sumHistAvgstarttime);
+    LOG.info("master:sumHistAvgstarttime: "+sumHistAvgstarttime);
     // Let everyone know the aggregated application state through the
     // superstep finishing znode.
     String superstepFinishedNode =
