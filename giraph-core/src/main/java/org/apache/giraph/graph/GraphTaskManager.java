@@ -364,10 +364,14 @@ end[PURE_YARN]*/
       }
       partitionStatsList.clear();
       // execute the current superstep
+      long t0=System.currentTimeMillis();
       if (numPartitions > 0) {
         processGraphPartitions(context, partitionStatsList, graphState,
           messageStore, numThreads);
       }
+      long t1=System.currentTimeMillis();
+      System.out.println("compute superstep," + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex() + ",start/end," + t0+","+t1);
+
       finishedSuperstepStats = completeSuperstepAndCollectStats(
         partitionStatsList, superstepTimerContext);
 
