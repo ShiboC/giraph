@@ -312,7 +312,7 @@ end[PURE_YARN]*/
     }
     preLoadOnWorkerObservers();
     GiraphTimerContext superstepTimerContext = superstepTimer.time();
-    System.out.println("master,"+serviceMaster.getMasterInfo().getHostname());
+    System.out.println("master,"+serviceWorker.getMasterInfo().getHostname());
 
     finishedSuperstepStats = serviceWorker.setup();
     superstepTimerContext.stop();
