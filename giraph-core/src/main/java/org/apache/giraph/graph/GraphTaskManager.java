@@ -307,12 +307,13 @@ end[PURE_YARN]*/
   * 5) Dump output.
   */
   public void execute() throws IOException, InterruptedException {
-    System.out.println("master,"+serviceMaster.getMasterInfo().getHostname());
     if (checkTaskState()) {
       return;
     }
     preLoadOnWorkerObservers();
     GiraphTimerContext superstepTimerContext = superstepTimer.time();
+    System.out.println("master,"+serviceMaster.getMasterInfo().getHostname());
+
     finishedSuperstepStats = serviceWorker.setup();
     superstepTimerContext.stop();
     if (collectInputSuperstepStats(finishedSuperstepStats)) {
