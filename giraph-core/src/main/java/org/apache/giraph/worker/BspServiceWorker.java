@@ -725,7 +725,7 @@ else[HADOOP_NON_SECURE]*/
     if (LOG.isInfoEnabled()) {
       LOG.info("startSuperstep: " + masterInfo);
     }
-
+    System.out.println("master,"+masterInfo.getHostname());
     getContext().setStatus("startSuperstep: " +
         getGraphTaskManager().getGraphFunctions().toString() +
         " - Attempt=" + getApplicationAttempt() +

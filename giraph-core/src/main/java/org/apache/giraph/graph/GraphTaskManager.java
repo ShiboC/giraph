@@ -384,7 +384,7 @@ end[PURE_YARN]*/
 
         // main superstep processing loop
         while (!finishedSuperstepStats.allVerticesHalted()) {
-            System.out.println("master," + serviceWorker.getMasterInfo().getHostname());
+//            System.out.println("master," + serviceWorker.getMasterInfo().getHostname());
 
             final long superstep = serviceWorker.getSuperstep();
             superstepTimerContext = getTimerForThisSuperstep(superstep);
