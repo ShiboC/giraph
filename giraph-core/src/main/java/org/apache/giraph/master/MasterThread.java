@@ -113,6 +113,8 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
             SuperstepState superstepState = SuperstepState.INITIAL;
 
             if (bspServiceMaster.becomeMaster()) {
+                System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname());
+
                 // First call to checkWorkers waits for all pending resources.
                 // If these resources are still available at subsequent calls it just
                 // reads zookeeper for the list of healthy workers.
