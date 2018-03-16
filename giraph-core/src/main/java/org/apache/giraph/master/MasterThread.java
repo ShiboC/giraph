@@ -131,7 +131,10 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
                     setupSecs = setupMillis / 1000.0d;
                     while (!superstepState.isExecutionComplete()) {
                         long startSuperstepMillis = System.currentTimeMillis();
+
+
                         long cachedSuperstep = bspServiceMaster.getSuperstep();
+                        System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname()+",start superstep "+cachedSuperstep);
                         GiraphMetrics.get().resetSuperstepMetrics(cachedSuperstep);
                         Class<? extends Computation> computationClass =
                                 bspServiceMaster.getMasterCompute().getComputation();

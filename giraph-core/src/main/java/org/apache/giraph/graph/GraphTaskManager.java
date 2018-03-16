@@ -357,6 +357,7 @@ end[PURE_YARN]*/
           serviceWorker.getServerData().getCurrentMessageStore();
       int numPartitions = serviceWorker.getPartitionStore().getNumPartitions();
       int numThreads = Math.min(numComputeThreads, numPartitions);
+      System.out.println("start superstep " + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex());
       if (LOG.isInfoEnabled()) {
         LOG.info("execute: " + numPartitions + " partitions to process with " +
           numThreads + " compute thread(s), originally " +
@@ -365,6 +366,8 @@ end[PURE_YARN]*/
       partitionStatsList.clear();
       // execute the current superstep
       long t0=System.currentTimeMillis();
+
+
       if (numPartitions > 0) {
         processGraphPartitions(context, partitionStatsList, graphState,
           messageStore, numThreads);
