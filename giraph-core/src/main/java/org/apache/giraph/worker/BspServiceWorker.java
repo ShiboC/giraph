@@ -1421,7 +1421,7 @@ else[HADOOP_NON_SECURE]*/
     Long t1 = System.currentTimeMillis();
     LOG.info("Save checkpoint in " + (t1- t0) +
         " ms, using " + numThreads + " threads");//
-    System.out.println("checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1);
+    System.out.println("master,"+getMasterInfo().getHostname()+",checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1);
 
   }
 
