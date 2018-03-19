@@ -113,7 +113,7 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
             SuperstepState superstepState = SuperstepState.INITIAL;
 
             if (bspServiceMaster.becomeMaster()) {
-                System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname());
+//                System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname());
 
                 // First call to checkWorkers waits for all pending resources.
                 // If these resources are still available at subsequent calls it just
@@ -136,7 +136,7 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
 
 
                         long cachedSuperstep = bspServiceMaster.getSuperstep();
-                        System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname()+",start superstep "+cachedSuperstep);
+//                        System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname()+",start superstep "+cachedSuperstep);
                         GiraphMetrics.get().resetSuperstepMetrics(cachedSuperstep);
                         Class<? extends Computation> computationClass =
                                 bspServiceMaster.getMasterCompute().getComputation();

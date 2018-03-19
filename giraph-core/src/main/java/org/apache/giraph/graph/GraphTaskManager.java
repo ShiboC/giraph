@@ -384,7 +384,6 @@ end[PURE_YARN]*/
 
         // main superstep processing loop
         while (!finishedSuperstepStats.allVerticesHalted()) {
-//            System.out.println("master," + serviceWorker.getMasterInfo().getHostname());
 
             final long superstep = serviceWorker.getSuperstep();
             superstepTimerContext = getTimerForThisSuperstep(superstep);
@@ -420,7 +419,7 @@ end[PURE_YARN]*/
                     serviceWorker.getServerData().getCurrentMessageStore();
             int numPartitions = serviceWorker.getPartitionStore().getNumPartitions();
             int numThreads = Math.min(numComputeThreads, numPartitions);
-            System.out.println("start superstep " + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex());
+//            System.out.println("start superstep " + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex());
             if (LOG.isInfoEnabled()) {
                 LOG.info("execute: " + numPartitions + " partitions to process with " +
                         numThreads + " compute thread(s), originally " +
