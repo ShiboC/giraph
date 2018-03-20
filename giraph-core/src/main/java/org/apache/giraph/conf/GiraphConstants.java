@@ -681,13 +681,13 @@ public interface GiraphConstants {
    */
   IntConfOption MAX_MASTER_SUPERSTEP_WAIT_MSECS =
       new IntConfOption("giraph.maxMasterSuperstepWaitMsecs",
-          MINUTES.toMillis(10),
+          MINUTES.toMillis(1),
           "Maximum milliseconds to wait before giving up trying to get the " +
           "minimum number of workers before a superstep (int).");
 
   /** Milliseconds for a request to complete (or else resend) */
   IntConfOption MAX_REQUEST_MILLISECONDS =
-      new IntConfOption("giraph.maxRequestMilliseconds", MINUTES.toMillis(10),
+      new IntConfOption("giraph.maxRequestMilliseconds", MINUTES.toMillis(1),
           "Milliseconds for a request to complete (or else resend)");
 
   /** Netty max connection failures */
@@ -1036,11 +1036,11 @@ public interface GiraphConstants {
   int ZOOKEEPER_PURGE_INTERVAL = 1;
   /** ZooKeeper minimum session timeout */
   IntConfOption ZOOKEEPER_MIN_SESSION_TIMEOUT =
-      new IntConfOption("giraph.zKMinSessionTimeout", MINUTES.toMillis(10),
+      new IntConfOption("giraph.zKMinSessionTimeout", MINUTES.toMillis(1),
           "ZooKeeper minimum session timeout");
   /** ZooKeeper maximum session timeout */
   IntConfOption ZOOKEEPER_MAX_SESSION_TIMEOUT =
-      new IntConfOption("giraph.zkMaxSessionTimeout", MINUTES.toMillis(15),
+      new IntConfOption("giraph.zkMaxSessionTimeout", MINUTES.toMillis(3),
           "ZooKeeper maximum session timeout");
 
   /** ZooKeeper force sync */
