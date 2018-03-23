@@ -1300,7 +1300,7 @@ public class BspServiceMaster<I extends WritableComparable,
         getWorkerInfoHealthyPath(getApplicationAttempt(), getSuperstep());
     List<String> finishedHostnameIdList = new ArrayList<>();
     long nextInfoMillis = System.currentTimeMillis();
-    final int defaultTaskTimeoutMsec = 10 * 60 * 1000;  // from TaskTracker
+    final int defaultTaskTimeoutMsec = 4 * 60 * 1000;  // from TaskTracker
     final int waitBetweenLogInfoMsec = 30 * 1000;
     final int taskTimeoutMsec = getContext().getConfiguration().getInt(
         "mapred.task.timeout", defaultTaskTimeoutMsec) / 2;
