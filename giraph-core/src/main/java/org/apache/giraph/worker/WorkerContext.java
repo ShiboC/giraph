@@ -161,7 +161,14 @@ public abstract class WorkerContext
   public final long getSuperstep() {
     return graphState.getSuperstep();
   }
-
+  /**
+   * Retrieves the restart superstep.
+   * shibo
+   * @return restart superstep
+   */
+  public final long getRestartSuperstep() {
+    return serviceWorker.getRestartedSuperstep();
+  }
   /**
    * Get the total (all workers) number of vertices that
    * existed in the previous superstep.

@@ -402,10 +402,7 @@ end[PURE_YARN]*/
             boolean hasBeenRestarted = checkSuperstepRestarted(superstep);
 
             GlobalStats globalStats = serviceWorker.getGlobalStats();
-            if(!hasBeenRestarted&&superstep==2&&getWorkerContext().getMyWorkerIndex()==2){
-                System.exit(3);
-                
-            }
+
             if (hasBeenRestarted) {
                 graphState = new GraphState(superstep,
                         finishedSuperstepStats.getVertexCount(),

@@ -338,6 +338,10 @@ public interface GiraphConstants {
   StrConfOption EDGE_OUTPUT_FORMAT_SUBDIR =
     new StrConfOption("giraph.edge.output.subdir", "",
                       "EdgeOutputFormat sub-directory");
+  /** Superstep to kill -2 means never --shibo*/
+  IntConfOption SUPERSTEP_TO_KILL =
+          new IntConfOption("giraph.supersteptokill", -2,
+                  "superstep to kill");
 
   /** GiraphTextOuputFormat Separator */
   StrConfOption GIRAPH_TEXT_OUTPUT_FORMAT_SEPARATOR =

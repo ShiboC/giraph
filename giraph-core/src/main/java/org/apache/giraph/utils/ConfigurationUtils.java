@@ -89,6 +89,9 @@ end[PURE_YARN]*/
 
   static {
     OPTIONS = new Options();
+    //shibo superstep to kill
+    OPTIONS.addOption("s", "superstepToKill", true, "Help");
+
     OPTIONS.addOption("h", "help", false, "Help");
     OPTIONS.addOption("la", "listAlgorithms", false, "List supported " +
         "algorithms");
@@ -366,6 +369,10 @@ end[PURE_YARN]*/
       if (cmd.hasOption("esd")) {
         conf.setEdgeOutputFormatSubdir(cmd.getOptionValue("esd"));
       }
+    }
+//shibo set superstep to kill
+    if (cmd.hasOption("s")) {
+        conf.setSuperstepToKill(Integer.parseInt(cmd.getOptionValue("s")));
     }
     /* check for path clashes */
     if (cmd.hasOption("vof") && cmd.hasOption("eof") && cmd.hasOption("op")) {
