@@ -30,6 +30,8 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Demonstrates the basic Pregel shortest paths implementation.
@@ -70,12 +72,24 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             vertex.setValue(new DoubleWritable(Double.MAX_VALUE));
         }
         WorkerContext wc=getWorkerContext();
-        System.out.println(getConf().getSuperstepToKill());
+        //set superstep to kill
+        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
+        String[] superstepToKillString=getConf().getSuperstepToKill().split(",");
+        for(int i=0;i<superstepToKillString.length;i++){
+            superstepToKillList.add(Long.parseLong(superstepToKillString[i]));
+        }
+
+        //set workerindex to kill
+        ArrayList<Integer> workerindexToKillList=new ArrayList<Integer>();
+        String[] workerindexToKillString=getConf().getWorkerindexToKill().split(",");
+        for(int i=0;i<workerindexToKillString.length;i++){
+            workerindexToKillList.add(Integer.parseInt(workerindexToKillString[i]));
+        }
+        System.out.println(workerindexToKillList);
         System.out.println(getWorkerContext().getMyWorkerIndex() + ";" + getWorkerContext().getSuperstep());
-        if (wc.getRestartSuperstep()!=3&&wc.getSuperstep() == 3 && wc.getMyWorkerIndex() == 0) {
+        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
+        if (wc.getRestartSuperstep()!=wc.getSuperstep() && superstepToKillList.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
             System.exit(-1);
-
-
         }
         long rs=wc.getRestartSuperstep();
         System.out.println("restartsuperstep:"+rs);

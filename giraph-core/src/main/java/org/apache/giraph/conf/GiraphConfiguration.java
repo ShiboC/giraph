@@ -530,16 +530,37 @@ public class GiraphConfiguration extends Configuration
 
     /**
      * Set the superstep to kill
-     * shibo
+     * @author Shibo Cheng
      *
      * @param superstepToKill
      */
-    public final void setSuperstepToKill(Integer superstepToKill) {
+    public final void setSuperstepToKill(String superstepToKill) {
         SUPERSTEP_TO_KILL.set(this, superstepToKill);
     }
-
-    public final int getSuperstepToKill() {
+    /**
+     * Get the superstep to kill
+     * @author Shibo Cheng
+     *
+     */
+    public final String getSuperstepToKill() {
         return SUPERSTEP_TO_KILL.get(this);
+    }
+    /**
+     * Set the workerindex to kill
+     * @author Shibo Cheng
+     *
+     * @param workerindexToKill
+     */
+    public final void setWorkerindexToKill(String workerindexToKill) {
+        WORKERINDEX_TO_KILL.set(this, workerindexToKill);
+    }
+    /**
+     * Get the workerindex to kill
+     * @author Shibo Cheng
+     *
+     */
+    public final String getWorkerindexToKill() {
+        return WORKERINDEX_TO_KILL.get(this);
     }
 
     /**

@@ -338,11 +338,20 @@ public interface GiraphConstants {
   StrConfOption EDGE_OUTPUT_FORMAT_SUBDIR =
     new StrConfOption("giraph.edge.output.subdir", "",
                       "EdgeOutputFormat sub-directory");
-  /** Superstep to kill -2 means never --shibo*/
-  IntConfOption SUPERSTEP_TO_KILL =
-          new IntConfOption("giraph.supersteptokill", -2,
+  /** Superstep to kill -2 means never,
+   *  for multiple steps, seperate by ','
+   * @author Shibo Cheng
+   * */
+  StrConfOption SUPERSTEP_TO_KILL =
+          new StrConfOption("giraph.supersteptokill", "-2",
                   "superstep to kill");
-
+  /** workerindex to kill -2 means never,
+   *  for multiple workers, seperate by ','
+   * @author Shibo Cheng
+   * */
+  StrConfOption WORKERINDEX_TO_KILL =
+          new StrConfOption("giraph.workerindextokill", "-2",
+                  "workerindex to kill");
   /** GiraphTextOuputFormat Separator */
   StrConfOption GIRAPH_TEXT_OUTPUT_FORMAT_SEPARATOR =
     new StrConfOption("giraph.textoutputformat.separator", "\t",
