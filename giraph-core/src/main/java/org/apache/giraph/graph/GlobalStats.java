@@ -30,172 +30,226 @@ import org.apache.hadoop.io.Writable;
  * Aggregated stats by the master.
  */
 public class GlobalStats implements Writable {
-  /** All vertices in the application */
-  private long vertexCount = 0;
-  /** All finished vertices in the last superstep */
-  private long finishedVertexCount = 0;
-  /** All edges in the last superstep */
-  private long edgeCount = 0;
-  /** All messages sent in the last superstep */
-  private long messageCount = 0;
-  /** All message bytes sent in the last superstep */
-  private long messageBytesCount = 0;
-  /** Whether the computation should be halted */
-  private boolean haltComputation = false;
-  /** Bytes of data stored to disk in the last superstep */
-  private long oocStoreBytesCount = 0;
-  /** Bytes of data loaded to disk in the last superstep */
-  private long oocLoadBytesCount = 0;
-  /** Lowest percentage of graph in memory throughout the execution */
-  private int lowestGraphPercentageInMemory = 100;
-  /**
-   * Master's decision on whether we should checkpoint and
-   * what to do next.
-   */
-  private CheckpointStatus checkpointStatus =
-      CheckpointStatus.NONE;
+    /**
+     * All vertices in the application
+     */
+    private long vertexCount = 0;
+    /**
+     * All finished vertices in the last superstep
+     */
+    private long finishedVertexCount = 0;
+    /**
+     * All edges in the last superstep
+     */
+    private long edgeCount = 0;
+    /**
+     * All messages sent in the last superstep
+     */
+    private long messageCount = 0;
+    /**
+     * All message bytes sent in the last superstep
+     */
+    private long messageBytesCount = 0;
+    /**
+     * Whether the computation should be halted
+     */
+    private boolean haltComputation = false;
+    /**
+     * Bytes of data stored to disk in the last superstep
+     */
+    private long oocStoreBytesCount = 0;
+    /**
+     * Bytes of data loaded to disk in the last superstep
+     */
+    private long oocLoadBytesCount = 0;
+    /**
+     * Lowest percentage of graph in memory throughout the execution
+     */
+    private int lowestGraphPercentageInMemory = 100;
+    /**
+     * Master's decision on whether we should checkpoint and
+     * what to do next.
+     */
+    private CheckpointStatus checkpointStatus =
+            CheckpointStatus.NONE;
 
-  /**
-   * Add the stats of a partition to the global stats.
-   *
-   * @param partitionStats Partition stats to be added.
-   */
-  public void addPartitionStats(PartitionStats partitionStats) {
-    this.vertexCount += partitionStats.getVertexCount();
-    this.finishedVertexCount += partitionStats.getFinishedVertexCount();
-    this.edgeCount += partitionStats.getEdgeCount();
-  }
+    /**
+     * @author Shibo Cheng
+     * checkpoint's earliest starttime and latest endtime, parameters for dynamic checkpointing
+     */
+    private long checkpointStartTime = 0;
+    private long checkpointEndTime = 0;
 
-  public long getVertexCount() {
-    return vertexCount;
-  }
-
-  public long getFinishedVertexCount() {
-    return finishedVertexCount;
-  }
-
-  public long getEdgeCount() {
-    return edgeCount;
-  }
-
-  public long getMessageCount() {
-    return messageCount;
-  }
-
-  public long getMessageBytesCount() {
-    return messageBytesCount;
-  }
-
-  public boolean getHaltComputation() {
-    return haltComputation;
-  }
-
-  public void setHaltComputation(boolean value) {
-    haltComputation = value;
-  }
-
-  public long getOocStoreBytesCount() {
-    return oocStoreBytesCount;
-  }
-
-  public long getOocLoadBytesCount() {
-    return oocLoadBytesCount;
-  }
-
-  public CheckpointStatus getCheckpointStatus() {
-    return checkpointStatus;
-  }
-
-  public void setCheckpointStatus(CheckpointStatus checkpointStatus) {
-    this.checkpointStatus = checkpointStatus;
-  }
-
-  public int getLowestGraphPercentageInMemory() {
-    return lowestGraphPercentageInMemory;
-  }
-
-  public void setLowestGraphPercentageInMemory(
-      int lowestGraphPercentageInMemory) {
-    this.lowestGraphPercentageInMemory = lowestGraphPercentageInMemory;
-  }
-
-  /**
-   * Add bytes loaded to the global stats.
-   *
-   * @param oocLoadBytesCount number of bytes to be added
-   */
-  public void addOocLoadBytesCount(long oocLoadBytesCount) {
-    this.oocLoadBytesCount += oocLoadBytesCount;
-  }
-
-  /**
-   * Add bytes stored to the global stats.
-   *
-   * @param oocStoreBytesCount number of bytes to be added
-   */
-  public void addOocStoreBytesCount(long oocStoreBytesCount) {
-    this.oocStoreBytesCount += oocStoreBytesCount;
-  }
-
-  /**
-   * Add messages to the global stats.
-   *
-   * @param messageCount Number of messages to be added.
-   */
-  public void addMessageCount(long messageCount) {
-    this.messageCount += messageCount;
-  }
-
-  /**
-   * Add messages to the global stats.
-   *
-   * @param msgBytesCount Number of message bytes to be added.
-   */
-  public void addMessageBytesCount(long msgBytesCount) {
-    this.messageBytesCount += msgBytesCount;
-  }
-
-  @Override
-  public void readFields(DataInput input) throws IOException {
-    vertexCount = input.readLong();
-    finishedVertexCount = input.readLong();
-    edgeCount = input.readLong();
-    messageCount = input.readLong();
-    messageBytesCount = input.readLong();
-    oocLoadBytesCount = input.readLong();
-    oocStoreBytesCount = input.readLong();
-    lowestGraphPercentageInMemory = input.readInt();
-    haltComputation = input.readBoolean();
-    if (input.readBoolean()) {
-      checkpointStatus = CheckpointStatus.values()[input.readInt()];
-    } else {
-      checkpointStatus = null;
+    /**
+     * Add the stats of a partition to the global stats.
+     *
+     * @param partitionStats Partition stats to be added.
+     */
+    public void addPartitionStats(PartitionStats partitionStats) {
+        this.vertexCount += partitionStats.getVertexCount();
+        this.finishedVertexCount += partitionStats.getFinishedVertexCount();
+        this.edgeCount += partitionStats.getEdgeCount();
     }
-  }
 
-  @Override
-  public void write(DataOutput output) throws IOException {
-    output.writeLong(vertexCount);
-    output.writeLong(finishedVertexCount);
-    output.writeLong(edgeCount);
-    output.writeLong(messageCount);
-    output.writeLong(messageBytesCount);
-    output.writeLong(oocLoadBytesCount);
-    output.writeLong(oocStoreBytesCount);
-    output.writeInt(lowestGraphPercentageInMemory);
-    output.writeBoolean(haltComputation);
-    output.writeBoolean(checkpointStatus != null);
-    if (checkpointStatus != null) {
-      output.writeInt(checkpointStatus.ordinal());
+    public long getVertexCount() {
+        return vertexCount;
     }
-  }
 
-  @Override
-  public String toString() {
-    return "(vtx=" + vertexCount + ",finVtx=" +
-        finishedVertexCount + ",edges=" + edgeCount + ",msgCount=" +
-        messageCount + ",msgBytesCount=" +
-          messageBytesCount + ",haltComputation=" + haltComputation +
-        ", checkpointStatus=" + checkpointStatus + ')';
-  }
+    public long getFinishedVertexCount() {
+        return finishedVertexCount;
+    }
+
+    public long getEdgeCount() {
+        return edgeCount;
+    }
+
+    public long getMessageCount() {
+        return messageCount;
+    }
+
+    public long getMessageBytesCount() {
+        return messageBytesCount;
+    }
+
+    public boolean getHaltComputation() {
+        return haltComputation;
+    }
+
+    public void setHaltComputation(boolean value) {
+        haltComputation = value;
+    }
+
+    public long getOocStoreBytesCount() {
+        return oocStoreBytesCount;
+    }
+
+    public long getOocLoadBytesCount() {
+        return oocLoadBytesCount;
+    }
+
+    public CheckpointStatus getCheckpointStatus() {
+        return checkpointStatus;
+    }
+
+    public void setCheckpointStatus(CheckpointStatus checkpointStatus) {
+        this.checkpointStatus = checkpointStatus;
+    }
+
+    //get and set methods for checkpoint starttime and endtime
+    public long getCheckpointStartTime() {
+        return checkpointStartTime;
+    }
+
+    public void setCheckpointStartTime(long value) {
+        if (checkpointStartTime == 0) {
+            checkpointStartTime = value;
+        } else if (checkpointStartTime > value) {
+            checkpointStartTime = value;
+        }
+    }
+
+    public long getCheckpointEndTime() {
+        return checkpointEndTime;
+    }
+
+    public void setCheckpointEndTime(long value) {
+        if (checkpointEndTime < value) {
+            checkpointEndTime = value;
+        }
+    }
+
+    public int getLowestGraphPercentageInMemory() {
+        return lowestGraphPercentageInMemory;
+    }
+
+    public void setLowestGraphPercentageInMemory(
+            int lowestGraphPercentageInMemory) {
+        this.lowestGraphPercentageInMemory = lowestGraphPercentageInMemory;
+    }
+
+    /**
+     * Add bytes loaded to the global stats.
+     *
+     * @param oocLoadBytesCount number of bytes to be added
+     */
+    public void addOocLoadBytesCount(long oocLoadBytesCount) {
+        this.oocLoadBytesCount += oocLoadBytesCount;
+    }
+
+    /**
+     * Add bytes stored to the global stats.
+     *
+     * @param oocStoreBytesCount number of bytes to be added
+     */
+    public void addOocStoreBytesCount(long oocStoreBytesCount) {
+        this.oocStoreBytesCount += oocStoreBytesCount;
+    }
+
+    /**
+     * Add messages to the global stats.
+     *
+     * @param messageCount Number of messages to be added.
+     */
+    public void addMessageCount(long messageCount) {
+        this.messageCount += messageCount;
+    }
+
+    /**
+     * Add messages to the global stats.
+     *
+     * @param msgBytesCount Number of message bytes to be added.
+     */
+    public void addMessageBytesCount(long msgBytesCount) {
+        this.messageBytesCount += msgBytesCount;
+    }
+
+    @Override
+    public void readFields(DataInput input) throws IOException {
+        vertexCount = input.readLong();
+        finishedVertexCount = input.readLong();
+        edgeCount = input.readLong();
+        messageCount = input.readLong();
+        messageBytesCount = input.readLong();
+        oocLoadBytesCount = input.readLong();
+        oocStoreBytesCount = input.readLong();
+        checkpointStartTime = input.readLong();
+        checkpointEndTime = input.readLong();
+        lowestGraphPercentageInMemory = input.readInt();
+        haltComputation = input.readBoolean();
+        if (input.readBoolean()) {
+            checkpointStatus = CheckpointStatus.values()[input.readInt()];
+        } else {
+            checkpointStatus = null;
+        }
+    }
+
+    @Override
+    public void write(DataOutput output) throws IOException {
+        output.writeLong(vertexCount);
+        output.writeLong(finishedVertexCount);
+        output.writeLong(edgeCount);
+        output.writeLong(messageCount);
+        output.writeLong(messageBytesCount);
+        output.writeLong(oocLoadBytesCount);
+        output.writeLong(oocStoreBytesCount);
+        output.writeLong(checkpointStartTime);
+        output.writeLong(checkpointEndTime);
+        output.writeInt(lowestGraphPercentageInMemory);
+        output.writeBoolean(haltComputation);
+        output.writeBoolean(checkpointStatus != null);
+        if (checkpointStatus != null) {
+            output.writeInt(checkpointStatus.ordinal());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "(vtx=" + vertexCount + ",finVtx=" +
+                finishedVertexCount + ",edges=" + edgeCount + ",msgCount=" +
+                messageCount + ",msgBytesCount=" +
+                messageBytesCount + ",haltComputation=" + haltComputation +
+                ", checkpointStatus=" + checkpointStatus +
+                ", checkpointStartTime=" + checkpointStartTime +
+                ", checkpointEndTime=" + checkpointEndTime + ')';
+    }
 }

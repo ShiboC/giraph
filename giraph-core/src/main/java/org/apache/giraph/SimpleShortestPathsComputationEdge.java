@@ -88,9 +88,9 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //        System.out.println(workerindexToKillList);
 //        System.out.println(getWorkerContext().getMyWorkerIndex() + ";" + getWorkerContext().getSuperstep());
 //        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
-        if (wc.getRestartSuperstep()!=wc.getSuperstep() && superstepToKillList.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
-            System.exit(-1);
-        }
+//        if (wc.getRestartSuperstep()!=wc.getSuperstep() && superstepToKillList.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
+//            System.exit(-1);
+//        }
         long rs=wc.getRestartSuperstep();
 //        System.out.println("restartsuperstep:"+rs);
         double minDist = isSource(vertex) ? 0d : Double.MAX_VALUE;

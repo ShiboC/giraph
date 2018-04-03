@@ -187,7 +187,13 @@ public class BspServiceWorker<I extends WritableComparable,
 
   /** Memory observer */
   private final MemoryObserver memoryObserver;
+  /**
+   * @author Shibo Cheng
+   * parameters for dynamic checkpointing
+   */
 
+  public long checkpointStartTime = 0;
+  public long checkpointEndTime = 0;
   /**
    * Constructor for setting up the worker.
    *
@@ -917,6 +923,9 @@ else[HADOOP_NON_SECURE]*/
         workerSentMessageBytes);
       workerFinishedInfoObj.put(JSONOBJ_METRICS_KEY,
           Base64.encodeBytes(metricsBytes));
+      //store checkpoint starttime and endtime to znode
+      workerFinishedInfoObj.put("checkpointStartTime", checkpointStartTime);
+      workerFinishedInfoObj.put("checkpointEndTime", checkpointEndTime);
     } catch (JSONException e) {
       throw new RuntimeException(e);
     }
@@ -1374,7 +1383,7 @@ else[HADOOP_NON_SECURE]*/
                     .get(getConfiguration())));
 
     long t0 = System.currentTimeMillis();
-
+    checkpointStartTime=t0;
     CallableFactory<Void> callableFactory = new CallableFactory<Void>() {
       @Override
       public Callable<Void> newCallable(int callableId) {
@@ -1419,9 +1428,10 @@ else[HADOOP_NON_SECURE]*/
     ProgressableUtils.getResultsWithNCallables(callableFactory, numThreads,
         "checkpoint-vertices-%d", getContext());
     Long t1 = System.currentTimeMillis();
+    checkpointEndTime=t1;
     LOG.info("Save checkpoint in " + (t1- t0) +
         " ms, using " + numThreads + " threads");//
-    System.out.println(",checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1+",restart,"+getRestartedSuperstep());
+    System.out.println("checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1+",restart,"+getRestartedSuperstep());
 
   }
 
