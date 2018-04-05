@@ -435,7 +435,7 @@ end[PURE_YARN]*/
                         messageStore, numThreads);
             }
             long t1 = System.currentTimeMillis();
-            System.out.println("compute superstep," + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex() + ",start/end," + t0 + "," + t1+",duration,"+(t1-t0));
+            System.out.println("compute superstep," + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex() + ",start/end," + t0 + "," + t1+",duration,"+(t1-t0)+",killset," +getWorkerContext().superstepToKillSet);
 
             finishedSuperstepStats = completeSuperstepAndCollectStats(
                     partitionStatsList, superstepTimerContext);
