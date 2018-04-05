@@ -1884,7 +1884,8 @@ public class BspServiceMaster<I extends WritableComparable,
                 }
             }
 
-            if (avgCheckpointCost <= recoveryCost && (int) (getSuperstep() - getLastGoodCheckpoint()) >= checkpointFrequency) {
+            if (avgCheckpointCost <= recoveryCost && ((int) (superstep - getLastGoodCheckpoint()) >= checkpointFrequency || getLastGoodCheckpoint() == -1)) {
+                System.out.println(superstep+",,,"+ getLastGoodCheckpoint()+",,,"+checkpointFrequency+",,,"+getLastGoodCheckpoint());
                 return CheckpointStatus.CHECKPOINT;
             }
         } catch (IOException e) {
