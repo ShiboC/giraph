@@ -155,7 +155,7 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
                                     " and is now on superstep " +
                                     bspServiceMaster.getSuperstep());
                         }
-                        System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname()+",coordination of superstep," + cachedSuperstep + ",start/end," + startSuperstepMillis + "," + endSuperstepMillis);
+                        System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname()+",coordination of superstep," + cachedSuperstep + ",start/end," + startSuperstepMillis + "," + endSuperstepMillis+",duration,"+(endSuperstepMillis-startSuperstepMillis));
 
                         if (superstepCounterOn) {
                             String computationName = (computationClass == null) ?
