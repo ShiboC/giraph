@@ -71,18 +71,20 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         if (getSuperstep() == 0) {
             vertex.setValue(new DoubleWritable(Double.MAX_VALUE));
         }
-        WorkerContext wc=getWorkerContext();
+        WorkerContext wc = getWorkerContext();
         //set superstep to kill
 //        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
-        String[] superstepToKillString=getConf().getSuperstepToKill().split(",");
-        for(int i=0;i<superstepToKillString.length;i++){
-            wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
+        String[] superstepToKillString = getConf().getSuperstepToKill().split(",");
+        if (getSuperstep() == 0) {
+            for (int i = 0; i < superstepToKillString.length; i++) {
+                wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
+            }
         }
 
         //set workerindex to kill
-        ArrayList<Integer> workerindexToKillList=new ArrayList<Integer>();
-        String[] workerindexToKillString=getConf().getWorkerindexToKill().split(",");
-        for(int i=0;i<workerindexToKillString.length;i++){
+        ArrayList<Integer> workerindexToKillList = new ArrayList<Integer>();
+        String[] workerindexToKillString = getConf().getWorkerindexToKill().split(",");
+        for (int i = 0; i < workerindexToKillString.length; i++) {
             workerindexToKillList.add(Integer.parseInt(workerindexToKillString[i]));
         }
 //        System.out.println( "killset before:"+wc.superstepToKillSet);
