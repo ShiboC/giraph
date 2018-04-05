@@ -73,10 +73,10 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         }
         WorkerContext wc=getWorkerContext();
         //set superstep to kill
-        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
+//        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
         String[] superstepToKillString=getConf().getSuperstepToKill().split(",");
         for(int i=0;i<superstepToKillString.length;i++){
-            superstepToKillList.add(Long.parseLong(superstepToKillString[i]));
+            wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
         }
 
         //set workerindex to kill
@@ -85,13 +85,16 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         for(int i=0;i<workerindexToKillString.length;i++){
             workerindexToKillList.add(Integer.parseInt(workerindexToKillString[i]));
         }
-//        System.out.println(workerindexToKillList);
+//        System.out.println( "killset before:"+wc.superstepToKillSet);
 //        System.out.println(getWorkerContext().getMyWorkerIndex() + ";" + getWorkerContext().getSuperstep());
 //        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
-        if (wc.getRestartSuperstep()!=wc.getSuperstep() && superstepToKillList.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
+        if (wc.superstepToKillSet.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
             System.exit(-1);
+            wc.superstepToKillSet.remove(wc.getSuperstep());
         }
-        long rs=wc.getRestartSuperstep();
+//        System.out.println( "killset after:"+wc.superstepToKillSet);
+
+//        long rs=wc.getRestartSuperstep();
 //        System.out.println("restartsuperstep:"+rs);
         double minDist = isSource(vertex) ? 0d : Double.MAX_VALUE;
         for (DoubleWritable message : messages) {

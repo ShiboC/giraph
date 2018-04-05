@@ -1431,7 +1431,7 @@ else[HADOOP_NON_SECURE]*/
     checkpointEndTime=t1;
     LOG.info("Save checkpoint in " + (t1- t0) +
         " ms, using " + numThreads + " threads");//
-    System.out.println("checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1+",duration,"+(t1-t0)+",restart,"+getRestartedSuperstep());
+    System.out.println("checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1+",duration,"+(t1-t0)+",restart,"+getRestartedSuperstep()+",killset," +workerContext.superstepToKillSet);
 
   }
 

@@ -21,6 +21,9 @@ package org.apache.giraph.worker;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.giraph.bsp.CentralizedServiceWorker;
@@ -46,6 +49,9 @@ public abstract class WorkerContext
   /** All workers info */
   private AllWorkersInfo allWorkersInfo;
 
+  //set superstep to kill
+  //shibo
+  public HashSet<Long> superstepToKillSet=new HashSet<Long>();
   /**
    * Set the graph state.
    *
@@ -161,14 +167,14 @@ public abstract class WorkerContext
   public final long getSuperstep() {
     return graphState.getSuperstep();
   }
-  /**
-   * Retrieves the restart superstep.
-   * shibo
-   * @return restart superstep
-   */
-  public final long getRestartSuperstep() {
-    return serviceWorker.getRestartedSuperstep();
-  }
+//  /**
+//   * Retrieves the restart superstep.
+//   * shibo
+//   * @return restart superstep
+//   */
+//  public final long getRestartSuperstep() {
+//    return serviceWorker.getRestartedSuperstep();
+//  }
   /**
    * Get the total (all workers) number of vertices that
    * existed in the previous superstep.
