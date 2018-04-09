@@ -1732,7 +1732,7 @@ public class BspServiceMaster<I extends WritableComparable,
         // are no more messages in the system, stop the computation
         GlobalStats globalStats = aggregateWorkerStats(getSuperstep());
         try {
-            if (getSuperstep() > -1 && getLastGoodCheckpoint() == getSuperstep()) {
+            if (getSuperstep() > -1 && getLastGoodCheckpoint() == getSuperstep()&&getRestartedSuperstep()!=getSuperstep()) {
                 //        checkpointTimeList.add(globalStats.getCheckpointEndTime() - globalStats.getCheckpointStartTime());
 
                 checkpointTimeList.add(5l);
@@ -1803,7 +1803,7 @@ public class BspServiceMaster<I extends WritableComparable,
         long endTime = System.currentTimeMillis();
         if (getSuperstep() > -1) {
             try {
-                if (getSuperstep() == getLastGoodCheckpoint()) {
+                if (getSuperstep() == getLastGoodCheckpoint()+1) {  //gesuperstep is already incremented
                     computeTimeList.add(endTime - startTime-checkpointTimeList.get(checkpointTimeList.size()-1));
                 }else{
                  computeTimeList.add(endTime - startTime) ;
