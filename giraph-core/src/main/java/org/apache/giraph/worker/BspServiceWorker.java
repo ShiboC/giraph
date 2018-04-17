@@ -194,6 +194,7 @@ public class BspServiceWorker<I extends WritableComparable,
 
   public long checkpointStartTime = 0;
   public long checkpointEndTime = 0;
+  public long computeStartTime=0;
   /**
    * Constructor for setting up the worker.
    *
@@ -926,6 +927,8 @@ else[HADOOP_NON_SECURE]*/
       //store checkpoint starttime and endtime to znode
       workerFinishedInfoObj.put("checkpointStartTime", checkpointStartTime);
       workerFinishedInfoObj.put("checkpointEndTime", checkpointEndTime);
+      workerFinishedInfoObj.put("computeStartTime", computeStartTime);
+
     } catch (JSONException e) {
       throw new RuntimeException(e);
     }
@@ -1781,7 +1784,16 @@ else[HADOOP_NON_SECURE]*/
   }
 
   @Override
+  public void setComputeStartTime(long value){
+    if (computeStartTime == 0) {
+      computeStartTime = value;
+    } else if (computeStartTime > value) {
+      computeStartTime = value;
+    }
+  }
+  @Override
   public PartitionStore<I, V, E> getPartitionStore() {
+
     return getServerData().getPartitionStore();
   }
 

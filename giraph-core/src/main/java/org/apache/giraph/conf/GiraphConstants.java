@@ -1297,9 +1297,11 @@ public interface GiraphConstants {
    * Since we should never really have to wait forever.
    * We should only wait some reasonable but large amount of time.
    */
+
+  //shibo, modify waiting time from 48hr to 15min.
   LongConfOption WAIT_FOR_OTHER_WORKERS_TIMEOUT_MSEC =
       new LongConfOption("giraph.waitForOtherWorkersMsec",
-          HOURS.toMillis(48),
+          MINUTES.toMillis(15),
           "How long should workers wait to finish superstep");
 
   /** Number of supersteps job will run for */

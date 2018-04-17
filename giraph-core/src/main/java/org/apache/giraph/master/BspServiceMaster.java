@@ -249,14 +249,38 @@ public class BspServiceMaster<I extends WritableComparable,
      * Checks if checkpointing supported
      */
     private final CheckpointSupportedChecker checkpointSupportedChecker;
+
     /**
      * @author Shibo Cheng
      * parameters for dynamic checkpointing
      */
 
-    private List<Long> computeTimeList = new ArrayList<Long>();
+    class ComputeTimeUnit {
+        public long superstep;
+        public long attempt;
+        public long time;
+
+        public ComputeTimeUnit(long superstep, long attempt, long time) {
+            this.superstep = superstep;
+            this.attempt = attempt;
+            this.time = time;
+        }
+
+        @Override
+        public String toString() {
+            return "ComputeTimeUnit{" +
+                    "superstep=" + superstep +
+                    ", attempt=" + attempt +
+                    ", time=" + time +
+                    '}';
+        }
+    }
+
+    private List<ComputeTimeUnit> computeTimeList = new ArrayList<ComputeTimeUnit>();
     private List<Long> checkpointTimeList = new ArrayList<Long>();
+
     private long recoveryOverhead = 1;
+    private List<Long> recoveryOverheadList=new ArrayList<Long>();
 //    private long recoveryOverhead=60000;
 
     /**
@@ -1008,6 +1032,8 @@ public class BspServiceMaster<I extends WritableComparable,
                                 JSONOBJ_NUM_MESSAGE_BYTES_KEY));
                 globalStats.setCheckpointStartTime(workerFinishedInfoObj.getLong("checkpointStartTime"));
                 globalStats.setCheckpointEndTime(workerFinishedInfoObj.getLong("checkpointEndTime"));
+                globalStats.setComputeStartTime(workerFinishedInfoObj.getLong("computeStartTime"));
+
 
                 if (conf.metricsEnabled() &&
                         workerFinishedInfoObj.has(JSONOBJ_METRICS_KEY)) {
@@ -1732,16 +1758,18 @@ public class BspServiceMaster<I extends WritableComparable,
         // are no more messages in the system, stop the computation
         GlobalStats globalStats = aggregateWorkerStats(getSuperstep());
         try {
-            if (getSuperstep() > -1 && getLastGoodCheckpoint() == getSuperstep()&&getRestartedSuperstep()!=getSuperstep()) {
-                //        checkpointTimeList.add(globalStats.getCheckpointEndTime() - globalStats.getCheckpointStartTime());
+            if (getSuperstep() > -1 && getLastGoodCheckpoint() == getSuperstep() && getRestartedSuperstep() != getSuperstep()) {
+                checkpointTimeList.add(globalStats.getCheckpointEndTime() - globalStats.getCheckpointStartTime());
 
-                checkpointTimeList.add(5l);
+//                checkpointTimeList.add(5l);
 
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("superstep, globalstats:" + getSuperstep() + "," + globalStats.getCheckpointStartTime() + "," + globalStats.getCheckpointEndTime());
+        System.out.println("superstep, globalstats:" + getSuperstep() + "," + globalStats.getCheckpointStartTime() +
+                "," + globalStats.getCheckpointEndTime() + "," + globalStats.getComputeStartTime());
+
         if (masterCompute.isHalted() ||
                 (globalStats.getFinishedVertexCount() ==
                         globalStats.getVertexCount() &&
@@ -1773,7 +1801,37 @@ public class BspServiceMaster<I extends WritableComparable,
             superstepClasses.verifyTypesMatch(getSuperstep() > 0);
         }
         getConfiguration().updateSuperstepClasses(superstepClasses);
+        //shibo
+        long endTime = System.currentTimeMillis();
+        if (getSuperstep() > -1) {
+//            try {
+//                if (getSuperstep() == getLastGoodCheckpoint() + 1 && checkpointTimeList.size() > 0) {  //gesuperstep is already incremented
+//                    computeTimeList.add(new ComputeTimeUnit(getSuperstep() - 1, getApplicationAttempt(), endTime -  - checkpointTimeList.get(checkpointTimeList.size() - 1)));
+//                } else if (getSuperstep()==) {
+//                } else {
+            computeTimeList.add(new ComputeTimeUnit(getSuperstep() , getApplicationAttempt(), endTime - globalStats.getComputeStartTime()));
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            System.out.println("getsuperstep," + getSuperstep());
+//            computeTimeList.add(2l);
+        }
+        System.out.println("computetimelist," + computeTimeList.toString());
+        System.out.println("checkpointlist," + checkpointTimeList.toString());
 
+        if(getRestartedSuperstep()==getSuperstep()){
+            recoveryOverheadList.add(globalStats.getComputeStartTime()-startTime);
+        }
+        long sumRecoveryOverhead=recoveryOverhead;
+        if (recoveryOverheadList.size() != 0) {
+            for (long time : recoveryOverheadList) {
+                sumRecoveryOverhead += time;
+            }
+        }
+        recoveryOverhead = sumRecoveryOverhead / recoveryOverheadList.size()+1;
+
+        //end shibo
         //Signal workers that we want to checkpoint
         checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
         globalStats.setCheckpointStatus(checkpointStatus);
@@ -1800,22 +1858,7 @@ public class BspServiceMaster<I extends WritableComparable,
         }
         globalCommHandler.getAggregatorHandler().writeAggregators(
                 getSuperstep(), superstepState);
-        long endTime = System.currentTimeMillis();
-        if (getSuperstep() > -1) {
-            try {
-                if (getSuperstep() == getLastGoodCheckpoint()+1) {  //gesuperstep is already incremented
-                    computeTimeList.add(endTime - startTime-checkpointTimeList.get(checkpointTimeList.size()-1));
-                }else{
-                 computeTimeList.add(endTime - startTime) ;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("getsuperstep,"+getSuperstep());
-//            computeTimeList.add(2l);
-        }
-        System.out.println("computetimelist,"+computeTimeList.toString());
-        System.out.println("checkpointlist,"+checkpointTimeList.toString());
+
 
         return superstepState;
     }
@@ -1878,19 +1921,42 @@ public class BspServiceMaster<I extends WritableComparable,
                 }
                 avgCheckpointCost = sumCheckpointCost / checkpointTimeList.size();
             }
+            System.out.println("avgck:"+avgCheckpointCost+",computelist:"+computeTimeList.size());
             if (computeTimeList.size() == 0) {
+
                 recoveryCost = 0;
             } else {
                 recoveryCost = recoveryOverhead;
 
-                for (int i = (int) getLastGoodCheckpoint(); i < computeTimeList.size(); i++) {
-                    recoveryCost += computeTimeList.get(i);
+//                for (int i = (int) getLastGoodCheckpoint(); i < computeTimeList.size(); i++) {
+//                    recoveryCost += computeTimeList.get(i);
+//
+//                }
+                ArrayList<ComputeTimeUnit> recomputeList = new ArrayList<>();
+                for (int i = 0; i < computeTimeList.size(); i++) {
+                    if (computeTimeList.get(i).superstep >= getLastGoodCheckpoint()) {
+                        if (recomputeList.size() > 0) {
+                            for (int j = 0; j < recomputeList.size(); j++) {
+                                if (computeTimeList.get(i).superstep == recomputeList.get(j).superstep
+                                        && computeTimeList.get(i).attempt > recomputeList.get(j).attempt) {
+                                    recomputeList.remove(recomputeList.get(j));
+                                }
 
+                            }
+
+                        }
+                        recomputeList.add(computeTimeList.get(i));
+
+                    }
                 }
+                for(int i=0;i<recomputeList.size();i++){
+                    recoveryCost+=recomputeList.get(i).time;
+                }
+                System.out.println("recomputelist:"+recomputeList.toString());
             }
-
+            System.out.println(avgCheckpointCost+","+recoveryCost);
             if (avgCheckpointCost <= recoveryCost && ((int) (superstep - getLastGoodCheckpoint()) >= checkpointFrequency || getLastGoodCheckpoint() == -1)) {
-                System.out.println("superstep,lastgoodck,ckfreq,"+superstep+",,,"+ getLastGoodCheckpoint()+",,,"+checkpointFrequency);
+                System.out.println("superstep,lastgoodck,ckfreq," + superstep + ",,," + getLastGoodCheckpoint() + ",,," + checkpointFrequency);
                 return CheckpointStatus.CHECKPOINT;
             }
         } catch (IOException e) {

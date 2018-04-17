@@ -79,6 +79,7 @@ public class GlobalStats implements Writable {
      */
     private long checkpointStartTime = 0;
     private long checkpointEndTime = 0;
+    private long computeStartTime = 0;
 
     /**
      * Add the stats of a partition to the global stats.
@@ -135,7 +136,7 @@ public class GlobalStats implements Writable {
         this.checkpointStatus = checkpointStatus;
     }
 
-    //get and set methods for checkpoint starttime and endtime
+    //get and set methods for checkpoint starttime and endtime, compute Starttime
     public long getCheckpointStartTime() {
         return checkpointStartTime;
     }
@@ -145,6 +146,18 @@ public class GlobalStats implements Writable {
             checkpointStartTime = value;
         } else if (checkpointStartTime > value) {
             checkpointStartTime = value;
+        }
+    }
+
+    public long getComputeStartTime() {
+        return computeStartTime;
+    }
+
+    public void setComputeStartTime(long value) {
+        if (computeStartTime == 0) {
+            computeStartTime = value;
+        } else if (computeStartTime > value) {
+            computeStartTime = value;
         }
     }
 
@@ -214,6 +227,7 @@ public class GlobalStats implements Writable {
         oocStoreBytesCount = input.readLong();
         checkpointStartTime = input.readLong();
         checkpointEndTime = input.readLong();
+        computeStartTime=input.readLong();
         lowestGraphPercentageInMemory = input.readInt();
         haltComputation = input.readBoolean();
         if (input.readBoolean()) {
@@ -234,6 +248,7 @@ public class GlobalStats implements Writable {
         output.writeLong(oocStoreBytesCount);
         output.writeLong(checkpointStartTime);
         output.writeLong(checkpointEndTime);
+        output.writeLong(computeStartTime);
         output.writeInt(lowestGraphPercentageInMemory);
         output.writeBoolean(haltComputation);
         output.writeBoolean(checkpointStatus != null);
@@ -250,6 +265,7 @@ public class GlobalStats implements Writable {
                 messageBytesCount + ",haltComputation=" + haltComputation +
                 ", checkpointStatus=" + checkpointStatus +
                 ", checkpointStartTime=" + checkpointStartTime +
-                ", checkpointEndTime=" + checkpointEndTime + ')';
+                ", checkpointEndTime=" + checkpointEndTime +
+                ", computeStartTime=" + computeStartTime +')';
     }
 }

@@ -102,6 +102,12 @@ public interface CentralizedServiceWorker<I extends WritableComparable,
   PartitionStore<I, V, E> getPartitionStore();
 
   /**
+   * @author Shibo Cheng
+   * set up compute start time;
+   */
+  void setComputeStartTime(long value);
+
+  /**
    *  Both the vertices and the messages need to be checkpointed in order
    *  for them to be used.  This is done after all messages have been
    *  delivered, but prior to a superstep starting.
