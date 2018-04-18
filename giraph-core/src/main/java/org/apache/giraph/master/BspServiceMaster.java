@@ -1814,11 +1814,11 @@ public class BspServiceMaster<I extends WritableComparable,
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            System.out.println("getsuperstep," + getSuperstep());
+//            System.out.println("getsuperstep," + getSuperstep());
 //            computeTimeList.add(2l);
         }
-        System.out.println("computetimelist," + computeTimeList.toString());
-        System.out.println("checkpointlist," + checkpointTimeList.toString());
+//        System.out.println("computetimelist," + computeTimeList.toString());
+//        System.out.println("checkpointlist," + checkpointTimeList.toString());
 
         if(getRestartedSuperstep()==getSuperstep()){
             recoveryOverheadList.add(globalStats.getComputeStartTime()-startTime);
@@ -1889,11 +1889,11 @@ public class BspServiceMaster<I extends WritableComparable,
             throw new IllegalStateException(
                     "cleanupZooKeeper: Got IllegalStateException", e);
         }
-        try {
-            System.out.println("superstep,lastgoodcheckpointsuperstep:" + getSuperstep() + "," + getLastGoodCheckpoint());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            System.out.println("superstep,lastgoodcheckpointsuperstep:" + getSuperstep() + "," + getLastGoodCheckpoint());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         if (checkpointFrequency == 0) {
             return CheckpointStatus.NONE;
         }
@@ -1921,7 +1921,7 @@ public class BspServiceMaster<I extends WritableComparable,
                 }
                 avgCheckpointCost = sumCheckpointCost / checkpointTimeList.size();
             }
-            System.out.println("avgck:"+avgCheckpointCost+",computelist:"+computeTimeList.size());
+//            System.out.println("avgck:"+avgCheckpointCost+",computelist:"+computeTimeList.size());
             if (computeTimeList.size() == 0) {
 
                 recoveryCost = 0;
@@ -1952,11 +1952,11 @@ public class BspServiceMaster<I extends WritableComparable,
                 for(int i=0;i<recomputeList.size();i++){
                     recoveryCost+=recomputeList.get(i).time;
                 }
-                System.out.println("recomputelist:"+recomputeList.toString());
+//                System.out.println("recomputelist:"+recomputeList.toString());
             }
-            System.out.println(avgCheckpointCost+","+recoveryCost);
+//            System.out.println(avgCheckpointCost+","+recoveryCost);
             if (avgCheckpointCost <= recoveryCost && ((int) (superstep - getLastGoodCheckpoint()) >= checkpointFrequency || getLastGoodCheckpoint() == -1)) {
-                System.out.println("superstep,lastgoodck,ckfreq," + superstep + ",,," + getLastGoodCheckpoint() + ",,," + checkpointFrequency);
+//                System.out.println("superstep,lastgoodck,ckfreq," + superstep + ",,," + getLastGoodCheckpoint() + ",,," + checkpointFrequency);
                 return CheckpointStatus.CHECKPOINT;
             }
         } catch (IOException e) {

@@ -21,10 +21,7 @@ package org.apache.giraph.worker;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import org.apache.giraph.bsp.CentralizedServiceWorker;
 import org.apache.giraph.comm.requests.SendWorkerToWorkerMessageRequest;
@@ -51,7 +48,9 @@ public abstract class WorkerContext
 
   //set superstep to kill
   //shibo
+//  public HashSet<Long> superstepToKillSet=new HashSet<Long>(Arrays.asList(-1l));
   public HashSet<Long> superstepToKillSet=new HashSet<Long>();
+
   /**
    * Set the graph state.
    *
