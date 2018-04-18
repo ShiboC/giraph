@@ -1767,8 +1767,8 @@ public class BspServiceMaster<I extends WritableComparable,
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("superstep, globalstats:" + getSuperstep() + "," + globalStats.getCheckpointStartTime() +
-                "," + globalStats.getCheckpointEndTime() + "," + globalStats.getComputeStartTime());
+//        System.out.println("superstep, globalstats:" + getSuperstep() + "," + globalStats.getCheckpointStartTime() +
+//                "," + globalStats.getCheckpointEndTime() + "," + globalStats.getComputeStartTime());
 
         if (masterCompute.isHalted() ||
                 (globalStats.getFinishedVertexCount() ==
@@ -1952,9 +1952,9 @@ public class BspServiceMaster<I extends WritableComparable,
                 for(int i=0;i<recomputeList.size();i++){
                     recoveryCost+=recomputeList.get(i).time;
                 }
-//                System.out.println("recomputelist:"+recomputeList.toString());
+                System.out.println("recomputelist:"+recomputeList.toString());
             }
-//            System.out.println(avgCheckpointCost+","+recoveryCost);
+            System.out.println(avgCheckpointCost+","+recoveryCost);
             if (avgCheckpointCost <= recoveryCost && ((int) (superstep - getLastGoodCheckpoint()) >= checkpointFrequency || getLastGoodCheckpoint() == -1)) {
 //                System.out.println("superstep,lastgoodck,ckfreq," + superstep + ",,," + getLastGoodCheckpoint() + ",,," + checkpointFrequency);
                 return CheckpointStatus.CHECKPOINT;
