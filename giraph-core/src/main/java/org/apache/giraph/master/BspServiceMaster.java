@@ -1829,7 +1829,7 @@ public class BspServiceMaster<I extends WritableComparable,
                 sumRecoveryOverhead += time;
             }
         }
-        recoveryOverhead = sumRecoveryOverhead / recoveryOverheadList.size()+1;
+        recoveryOverhead = sumRecoveryOverhead / (recoveryOverheadList.size()+1);
 
         //end shibo
         //Signal workers that we want to checkpoint
