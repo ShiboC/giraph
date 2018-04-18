@@ -51,6 +51,7 @@ public class SimpleShortestPathsComputationWiki extends BasicComputation<
    * @return True if the source id
    */
   private boolean isSource(Vertex<IntWritable, ?, ?> vertex) {
+
     return vertex.getId().get() == SOURCE_ID.get(getConf());
   }
 

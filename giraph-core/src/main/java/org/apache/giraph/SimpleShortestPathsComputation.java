@@ -67,6 +67,7 @@ public class SimpleShortestPathsComputation extends BasicComputation<
     for (DoubleWritable message : messages) {
       minDist = Math.min(minDist, message.get());
     }
+
     if (LOG.isDebugEnabled()) {
       LOG.debug("Vertex " + vertex.getId() + " got minDist = " + minDist +
           " vertex value = " + vertex.getValue());

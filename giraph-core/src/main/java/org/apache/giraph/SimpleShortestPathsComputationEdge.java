@@ -62,6 +62,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
      */
     private boolean isSource(Vertex<IntWritable, ?, ?> vertex) {
         return vertex.getId().get() == SOURCE_ID.get(getConf());
+
     }
 
     @Override
