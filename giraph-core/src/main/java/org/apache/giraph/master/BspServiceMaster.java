@@ -1952,9 +1952,9 @@ public class BspServiceMaster<I extends WritableComparable,
                 for(int i=0;i<recomputeList.size();i++){
                     recoveryCost+=recomputeList.get(i).time;
                 }
-                System.out.println("recomputelist:"+recomputeList.toString());
+//                System.out.println("recomputelist:"+recomputeList.toString());
             }
-            System.out.println(avgCheckpointCost+","+recoveryCost);
+//            System.out.println("avgck,recost,reoverhead:"+avgCheckpointCost+","+recoveryCost+","+recoveryOverhead);
             if (avgCheckpointCost <= recoveryCost && ((int) (superstep - getLastGoodCheckpoint()) >= checkpointFrequency || getLastGoodCheckpoint() == -1)) {
 //                System.out.println("superstep,lastgoodck,ckfreq," + superstep + ",,," + getLastGoodCheckpoint() + ",,," + checkpointFrequency);
                 return CheckpointStatus.CHECKPOINT;
