@@ -77,7 +77,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
         String[] superstepToKillString = getConf().getSuperstepToKill().split(",");
         System.out.println("atempt:"+getContext().getTaskAttemptID().getId());
-        for (int i = getContext().getTaskAttemptID().getId()+1; i < superstepToKillString.length; i++) {
+        for (int i = getContext().getTaskAttemptID().getId(); i < superstepToKillString.length; i++) {
             wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
         }
 
