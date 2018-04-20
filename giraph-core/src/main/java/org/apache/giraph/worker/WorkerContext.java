@@ -25,6 +25,7 @@ import java.util.*;
 
 import org.apache.giraph.bsp.CentralizedServiceWorker;
 import org.apache.giraph.comm.requests.SendWorkerToWorkerMessageRequest;
+import org.apache.giraph.graph.GlobalStats;
 import org.apache.giraph.graph.GraphState;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
@@ -50,7 +51,7 @@ public abstract class WorkerContext
   //shibo
 //  public HashSet<Long> superstepToKillSet=new HashSet<Long>(Arrays.asList(-1l));
   public HashSet<Long> superstepToKillSet=new HashSet<Long>();
-
+  public int restartCounter=0;
   /**
    * Set the graph state.
    *

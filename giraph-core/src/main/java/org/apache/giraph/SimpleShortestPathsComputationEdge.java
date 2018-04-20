@@ -103,11 +103,11 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //        System.out.println("wc:"+wc.getMyWorkerIndex() + ";" +wc.getSuperstep());
 //        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
         if (superstepToKillList.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
-            superstepToKillList.remove(wc.getSuperstep());
-            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
-            if(!stk.contains(",")){
-                getConf().setSuperstepToKill("-1");
-            }
+//            superstepToKillList.remove(wc.getSuperstep());
+//            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
+//            if(!stk.contains(",")){
+//                getConf().setSuperstepToKill("-1");
+//            }
                     System.out.println("after kill:"+getConf().getSuperstepToKill());
 
             System.exit(-1);
