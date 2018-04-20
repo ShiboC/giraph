@@ -74,14 +74,16 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         }
         WorkerContext wc = getWorkerContext();
         //set superstep to kill
-//        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
-        String[] superstepToKillString = getConf().getSuperstepToKill().split(",");
-        System.out.println("atempt:"+getContext().getTaskAttemptID().getId());
-        for (int i = getContext().getTaskAttemptID().getId(); i < superstepToKillString.length; i++) {
-            wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
+        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
+        String stk=getConf().getSuperstepToKill();
+        String[] superstepToKillString = stk.split(",");
+//        wc.superstepToKillSet.clear();
+//        System.out.println("atempt:"+getContext().getTaskAttemptID().getId());
+        for (int i = 0; i < superstepToKillString.length; i++) {
+            superstepToKillList.add(Long.parseLong(superstepToKillString[i]));
         }
 
-        System.out.println("before kill:"+wc.superstepToKillSet.toString());
+//        System.out.println("before kill:"+superstepToKillList.toString());
         //set workerindex to kill
         ArrayList<Integer> workerindexToKillList = new ArrayList<Integer>();
 //        System.out.println("wc stkset:"+wc.superstepToKillSet.toString());
@@ -100,12 +102,15 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //
 //        System.out.println("wc:"+wc.getMyWorkerIndex() + ";" +wc.getSuperstep());
 //        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
-        if (wc.superstepToKillSet.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
-            wc.superstepToKillSet.remove(wc.getSuperstep());
-
+        if (superstepToKillList.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
+            superstepToKillList.remove(wc.getSuperstep());
+            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
+            if(!stk.contains(",")){
+                getConf().setSuperstepToKill("-1");
+            }
             System.exit(-1);
         }
-        System.out.println("after kill:"+wc.superstepToKillSet.toString());
+//        System.out.println("after kill:"+getConf().getSuperstepToKill());
 
 //        System.out.println( "killset after:"+wc.superstepToKillSet);
 
