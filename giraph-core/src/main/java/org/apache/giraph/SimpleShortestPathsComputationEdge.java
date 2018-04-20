@@ -76,11 +76,11 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         //set superstep to kill
 //        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
         String[] superstepToKillString = getConf().getSuperstepToKill().split(",");
-        if (getSuperstep() == 0) {
-            for (int i = 0; i < superstepToKillString.length; i++) {
+
+            for (int i = getContext().getTaskAttemptID().getId(); i < superstepToKillString.length; i++) {
                 wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
             }
-        }
+
 
         //set workerindex to kill
         ArrayList<Integer> workerindexToKillList = new ArrayList<Integer>();
