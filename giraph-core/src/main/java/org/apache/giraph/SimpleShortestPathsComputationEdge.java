@@ -76,12 +76,12 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         //set superstep to kill
 //        ArrayList<Long> superstepToKillList=new ArrayList<Long>();
         String[] superstepToKillString = getConf().getSuperstepToKill().split(",");
+        System.out.println("atempt:"+getContext().getTaskAttemptID().getId());
+        for (int i = getContext().getTaskAttemptID().getId()+1; i < superstepToKillString.length; i++) {
+            wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
+        }
 
-            for (int i = getContext().getTaskAttemptID().getId(); i < superstepToKillString.length; i++) {
-                wc.superstepToKillSet.add(Long.parseLong(superstepToKillString[i]));
-            }
-
-
+        System.out.println("before kill:"+wc.superstepToKillSet.toString());
         //set workerindex to kill
         ArrayList<Integer> workerindexToKillList = new ArrayList<Integer>();
 //        System.out.println("wc stkset:"+wc.superstepToKillSet.toString());
@@ -103,8 +103,10 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         if (wc.superstepToKillSet.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
             wc.superstepToKillSet.remove(wc.getSuperstep());
 
-            System.exit(-1);
+//            System.exit(-1);
         }
+        System.out.println("after kill:"+wc.superstepToKillSet.toString());
+
 //        System.out.println( "killset after:"+wc.superstepToKillSet);
 
 //        long rs=wc.getRestartSuperstep();

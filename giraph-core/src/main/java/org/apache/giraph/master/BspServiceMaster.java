@@ -1814,6 +1814,7 @@ public class BspServiceMaster<I extends WritableComparable,
         if(checkpointStatus!=CheckpointStatus.NONE){
             System.out.println("superstep,"+getSuperstep()+",checkpointStart,"+globalStats.getCheckpointStartTime()+",end,"+globalStats.getCheckpointEndTime()+",duration,"+(globalStats.getCheckpointEndTime()-globalStats.getCheckpointStartTime()));
         }
+
         if (getSuperstep() > -1) {
 //            try {
 //                if (getSuperstep() == getLastGoodCheckpoint() + 1 && checkpointTimeList.size() > 0) {  //gesuperstep is already incremented
