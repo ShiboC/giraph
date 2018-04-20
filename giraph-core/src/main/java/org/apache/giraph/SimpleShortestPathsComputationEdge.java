@@ -103,7 +103,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
         if (wc.superstepToKillSet.contains(wc.getSuperstep()) && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
             wc.superstepToKillSet.remove(wc.getSuperstep());
 
-//            System.exit(-1);
+            System.exit(-1);
         }
         System.out.println("after kill:"+wc.superstepToKillSet.toString());
 
