@@ -562,6 +562,14 @@ public class GiraphConfiguration extends Configuration
     public final String getWorkerindexToKill() {
         return WORKERINDEX_TO_KILL.get(this);
     }
+    /**
+     * Get the checkpoint strategy
+     * @author Shibo Cheng
+     *
+     */
+    public final String getCheckpointStrategy() {
+        return CHECKPOINT_STRATEGY.get(this);
+    }
 
     /**
      * Get the number of threads to use for writing output in the end of the

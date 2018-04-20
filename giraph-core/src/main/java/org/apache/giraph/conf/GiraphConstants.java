@@ -343,15 +343,23 @@ public interface GiraphConstants {
    * @author Shibo Cheng
    * */
   StrConfOption SUPERSTEP_TO_KILL =
-          new StrConfOption("giraph.supersteptokill", "-2",
+          new StrConfOption("giraph.superstepToKill", "-2",
                   "superstep to kill");
   /** workerindex to kill -2 means never,
    *  for multiple workers, seperate by ','
    * @author Shibo Cheng
    * */
   StrConfOption WORKERINDEX_TO_KILL =
-          new StrConfOption("giraph.workerindextokill", "-2",
+          new StrConfOption("giraph.workerIndexToKill", "-2",
                   "workerindex to kill");
+  /** checkpoint strategy: d(dynamic),s(static),n(none).
+   * @author Shibo Cheng
+   * */
+  StrConfOption CHECKPOINT_STRATEGY =
+          new StrConfOption("giraph.checkpointStrategy", "n",
+                  "checkpoint strategy,d(dynamic),s(static),n(none)");
+
+
   /** GiraphTextOuputFormat Separator */
   StrConfOption GIRAPH_TEXT_OUTPUT_FORMAT_SEPARATOR =
     new StrConfOption("giraph.textoutputformat.separator", "\t",

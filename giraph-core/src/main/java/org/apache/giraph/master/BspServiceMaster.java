@@ -242,6 +242,12 @@ public class BspServiceMaster<I extends WritableComparable,
      */
     private final int checkpointFrequency;
     /**
+     * Checkpoint strategy
+     *
+     * @author Shibo Cheng
+     */
+    private String checkpointStrategy;
+    /**
      * Current checkpoint status
      */
     private CheckpointStatus checkpointStatus;
@@ -279,8 +285,8 @@ public class BspServiceMaster<I extends WritableComparable,
     private List<ComputeTimeUnit> computeTimeList = new ArrayList<ComputeTimeUnit>();
     private List<Long> checkpointTimeList = new ArrayList<Long>();
 
-    private long recoveryOverhead = 1;
-    private List<Long> recoveryOverheadList=new ArrayList<Long>();
+//    private long recoveryOverhead = 1;
+//    private List<Long> recoveryOverheadList = new ArrayList<Long>();
 //    private long recoveryOverhead=60000;
 
     /**
@@ -319,6 +325,8 @@ public class BspServiceMaster<I extends WritableComparable,
         observers = conf.createMasterObservers(context);
 
         this.checkpointFrequency = conf.getCheckpointFrequency();
+        this.checkpointStrategy = conf.getCheckpointStrategy();
+        System.out.println("checkpoint strategy="+this.checkpointStrategy+",interval:"+this.checkpointFrequency+",stk:"+conf.getSuperstepToKill()+",wtk:"+conf.getWorkerindexToKill());
         this.checkpointStatus = CheckpointStatus.NONE;
         this.checkpointSupportedChecker =
                 ReflectionUtils.newInstance(
@@ -1803,13 +1811,17 @@ public class BspServiceMaster<I extends WritableComparable,
         getConfiguration().updateSuperstepClasses(superstepClasses);
         //shibo
         long endTime = System.currentTimeMillis();
+        if(checkpointStatus!=CheckpointStatus.NONE){
+            System.out.println("superstep,"+getSuperstep()+",checkpointStart,"+globalStats.getCheckpointStartTime()+",end,"+globalStats.getCheckpointEndTime()+",duration,"+(globalStats.getCheckpointEndTime()-globalStats.getCheckpointStartTime()));
+        }
         if (getSuperstep() > -1) {
 //            try {
 //                if (getSuperstep() == getLastGoodCheckpoint() + 1 && checkpointTimeList.size() > 0) {  //gesuperstep is already incremented
 //                    computeTimeList.add(new ComputeTimeUnit(getSuperstep() - 1, getApplicationAttempt(), endTime -  - checkpointTimeList.get(checkpointTimeList.size() - 1)));
 //                } else if (getSuperstep()==) {
 //                } else {
-            computeTimeList.add(new ComputeTimeUnit(getSuperstep() , getApplicationAttempt(), endTime - globalStats.getComputeStartTime()));
+            computeTimeList.add(new ComputeTimeUnit(getSuperstep(), getApplicationAttempt(), endTime - globalStats.getComputeStartTime()));
+            System.out.println("superstep,"+getSuperstep()+",computeStart,"+globalStats.getComputeStartTime()+",end,"+endTime+",duration,"+(endTime-globalStats.getComputeStartTime()));
 //
 //            } catch (IOException e) {
 //                e.printStackTrace();
@@ -1817,19 +1829,20 @@ public class BspServiceMaster<I extends WritableComparable,
 //            System.out.println("getsuperstep," + getSuperstep());
 //            computeTimeList.add(2l);
         }
+
 //        System.out.println("computetimelist," + computeTimeList.toString());
 //        System.out.println("checkpointlist," + checkpointTimeList.toString());
 
-        if(getRestartedSuperstep()==getSuperstep()){
-            recoveryOverheadList.add(globalStats.getComputeStartTime()-startTime);
-        }
-        long sumRecoveryOverhead=recoveryOverhead;
-        if (recoveryOverheadList.size() != 0) {
-            for (long time : recoveryOverheadList) {
-                sumRecoveryOverhead += time;
-            }
-        }
-        recoveryOverhead = sumRecoveryOverhead / (recoveryOverheadList.size()+1);
+//        if (getRestartedSuperstep() == getSuperstep()) {
+//            recoveryOverheadList.add(globalStats.getComputeStartTime() - startTime);
+//        }
+//        long sumRecoveryOverhead = recoveryOverhead;
+//        if (recoveryOverheadList.size() != 0) {
+//            for (long time : recoveryOverheadList) {
+//                sumRecoveryOverhead += time;
+//            }
+//        }
+//        recoveryOverhead = sumRecoveryOverhead / (recoveryOverheadList.size() + 1);
 
         //end shibo
         //Signal workers that we want to checkpoint
@@ -1894,73 +1907,80 @@ public class BspServiceMaster<I extends WritableComparable,
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        if (checkpointFrequency == 0) {
+//        if (checkpointFrequency == 0) {
+        if (checkpointStrategy.equals("n")) {
+
             return CheckpointStatus.NONE;
         }
-        long firstCheckpoint = INPUT_SUPERSTEP + 1;
-//        if (getRestartedSuperstep() != UNSET_SUPERSTEP) {
-//            firstCheckpoint = getRestartedSuperstep() + checkpointFrequency;
-//        }
-//        if (superstep < firstCheckpoint) {
-//            return CheckpointStatus.NONE;
-//        }
-//        if (((superstep - firstCheckpoint) % checkpointFrequency) == 0) {
-//            if (isCheckpointingSupported(getConfiguration(), masterCompute)) {
-//                return CheckpointStatus.CHECKPOINT;
-//            }
-//        }
-        try {
-            //dynamic checkpointing
-            double avgCheckpointCost = 0;
-            double sumCheckpointCost = 0;
-            double recoveryCost = 0;
-
-            if (checkpointTimeList.size() != 0) {
-                for (long checkpointcost : checkpointTimeList) {
-                    sumCheckpointCost += checkpointcost;
-                }
-                avgCheckpointCost = sumCheckpointCost / checkpointTimeList.size();
+        if (checkpointStrategy.equals("s")) {
+            long firstCheckpoint = INPUT_SUPERSTEP + 1;
+            if (getRestartedSuperstep() != UNSET_SUPERSTEP) {
+                firstCheckpoint = getRestartedSuperstep() + checkpointFrequency;
             }
-//            System.out.println("avgck:"+avgCheckpointCost+",computelist:"+computeTimeList.size());
-            if (computeTimeList.size() == 0) {
+            if (superstep < firstCheckpoint) {
+                return CheckpointStatus.NONE;
+            }
+            if (((superstep - firstCheckpoint) % checkpointFrequency) == 0) {
+                if (isCheckpointingSupported(getConfiguration(), masterCompute)) {
+                    return CheckpointStatus.CHECKPOINT;
+                }
+            }
+        }
+        if (checkpointStrategy.equals("d")) {
 
-                recoveryCost = 0;
-            } else {
-                recoveryCost = recoveryOverhead;
+            try {
+                //dynamic checkpointing
+                double avgCheckpointCost = 0;
+                double sumCheckpointCost = 0;
+                long recoveryCost = 0;
+
+                if (checkpointTimeList.size() != 0) {
+                    for (long checkpointcost : checkpointTimeList) {
+                        sumCheckpointCost += checkpointcost;
+                    }
+                    avgCheckpointCost = sumCheckpointCost / checkpointTimeList.size();
+                }
+//            System.out.println("avgck:"+avgCheckpointCost+",computelist:"+computeTimeList.size());
+                if (computeTimeList.size() == 0) {
+
+//                recoveryCost = 0;
+                } else {
+//                recoveryCost = recoveryOverhead;
 
 //                for (int i = (int) getLastGoodCheckpoint(); i < computeTimeList.size(); i++) {
 //                    recoveryCost += computeTimeList.get(i);
 //
 //                }
-                ArrayList<ComputeTimeUnit> recomputeList = new ArrayList<>();
-                for (int i = 0; i < computeTimeList.size(); i++) {
-                    if (computeTimeList.get(i).superstep >= getLastGoodCheckpoint()) {
-                        if (recomputeList.size() > 0) {
-                            for (int j = 0; j < recomputeList.size(); j++) {
-                                if (computeTimeList.get(i).superstep == recomputeList.get(j).superstep
-                                        && computeTimeList.get(i).attempt > recomputeList.get(j).attempt) {
-                                    recomputeList.remove(recomputeList.get(j));
+                    ArrayList<ComputeTimeUnit> recomputeList = new ArrayList<>();
+                    for (int i = 0; i < computeTimeList.size(); i++) {
+                        if (computeTimeList.get(i).superstep >= getLastGoodCheckpoint()) {
+                            if (recomputeList.size() > 0) {
+                                for (int j = 0; j < recomputeList.size(); j++) {
+                                    if (computeTimeList.get(i).superstep == recomputeList.get(j).superstep
+                                            && computeTimeList.get(i).attempt > recomputeList.get(j).attempt) {
+                                        recomputeList.remove(recomputeList.get(j));
+                                    }
+
                                 }
 
                             }
+                            recomputeList.add(computeTimeList.get(i));
 
                         }
-                        recomputeList.add(computeTimeList.get(i));
-
                     }
-                }
-                for(int i=0;i<recomputeList.size();i++){
-                    recoveryCost+=recomputeList.get(i).time;
-                }
+                    for (int i = 0; i < recomputeList.size(); i++) {
+                        recoveryCost += recomputeList.get(i).time;
+                    }
 //                System.out.println("recomputelist:"+recomputeList.toString());
-            }
-//            System.out.println("avgck,recost,reoverhead:"+avgCheckpointCost+","+recoveryCost+","+recoveryOverhead);
-            if (avgCheckpointCost <= recoveryCost && ((int) (superstep - getLastGoodCheckpoint()) >= checkpointFrequency || getLastGoodCheckpoint() == -1)) {
+                }
+//            System.out.println("avgck,recost,reoverhead:"+avgCheckpointCost+","+recoveryCost);
+                if (avgCheckpointCost <= recoveryCost && ((int) (superstep - getLastGoodCheckpoint()) >= checkpointFrequency || getLastGoodCheckpoint() == -1)) {
 //                System.out.println("superstep,lastgoodck,ckfreq," + superstep + ",,," + getLastGoodCheckpoint() + ",,," + checkpointFrequency);
-                return CheckpointStatus.CHECKPOINT;
+                    return CheckpointStatus.CHECKPOINT;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return CheckpointStatus.NONE;
     }
