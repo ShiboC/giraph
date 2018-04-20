@@ -1671,7 +1671,7 @@ public class BspServiceMaster<I extends WritableComparable,
             getContext().progress();
         }
         if (getSuperstep() >= 0) {
-
+            System.out.println("before:skt:"+stk);
             if (getSuperstep() == 0) {
                 stk = getConfiguration().getSuperstepToKill();
             }
@@ -1682,6 +1682,9 @@ public class BspServiceMaster<I extends WritableComparable,
                 }
             }
             getConfiguration().setSuperstepToKill(stk);
+            System.out.println("after:skt:"+stk);
+
+            System.out.println(getConfiguration().getSuperstepToKill());
         }
         chosenWorkerInfoList = checkWorkers();
         if (chosenWorkerInfoList == null) {
