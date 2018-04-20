@@ -83,7 +83,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             superstepToKillList.add(Long.parseLong(superstepToKillString[i]));
         }
 
-//        System.out.println("before kill:"+superstepToKillList.toString());
+        System.out.println("before kill:"+superstepToKillList.toString());
         //set workerindex to kill
         ArrayList<Integer> workerindexToKillList = new ArrayList<Integer>();
 //        System.out.println("wc stkset:"+wc.superstepToKillSet.toString());
@@ -108,9 +108,10 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             if(!stk.contains(",")){
                 getConf().setSuperstepToKill("-1");
             }
+                    System.out.println("after kill:"+getConf().getSuperstepToKill());
+
             System.exit(-1);
         }
-//        System.out.println("after kill:"+getConf().getSuperstepToKill());
 
 //        System.out.println( "killset after:"+wc.superstepToKillSet);
 
