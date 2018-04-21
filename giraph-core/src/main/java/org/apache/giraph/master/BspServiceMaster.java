@@ -1676,9 +1676,12 @@ public class BspServiceMaster<I extends WritableComparable,
                 stk = getConfiguration().getSuperstepToKill();
             }
             if (getSuperstep() == getRestartedSuperstep()) {
-                stk = stk.substring(stk.indexOf(",") + 1);
+
                 if (!stk.contains(",")) {
                     stk = "-2";
+                }else{
+                    stk = stk.substring(stk.indexOf(",") + 1);
+
                 }
             }
             getConfiguration().setSuperstepToKill(stk);
@@ -1863,6 +1866,13 @@ public class BspServiceMaster<I extends WritableComparable,
         //Signal workers that we want to checkpoint
         checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
         globalStats.setCheckpointStatus(checkpointStatus);
+        if(stk.contains(",")){
+            globalStats.setSuperstepToKill(Long.parseLong(stk.split(",")[0]));
+
+        }else{
+            globalStats.setSuperstepToKill(Long.parseLong(stk));
+
+        }
         // Let everyone know the aggregated application state through the
         // superstep finishing znode.
         String superstepFinishedNode =

@@ -50,8 +50,6 @@ public abstract class WorkerContext
   //set superstep to kill
   //shibo
 //  public HashSet<Long> superstepToKillSet=new HashSet<Long>(Arrays.asList(-1l));
-  public HashSet<Long> superstepToKillSet=new HashSet<Long>();
-  public int restartCounter=0;
   /**
    * Set the graph state.
    *
@@ -167,14 +165,22 @@ public abstract class WorkerContext
   public final long getSuperstep() {
     return graphState.getSuperstep();
   }
-//  /**
-//   * Retrieves the restart superstep.
-//   * shibo
-//   * @return restart superstep
-//   */
-//  public final long getRestartSuperstep() {
-//    return serviceWorker.getRestartedSuperstep();
-//  }
+  /**
+   * Retrieves the restart superstep.
+   * shibo
+   * @return restart superstep
+   */
+  public final long getRestartSuperstep() {
+    return serviceWorker.getRestartedSuperstep();
+  }
+  /**
+   * Retrieves the superstep to kill.
+   * shibo
+   * @return the superstep to kill
+   */
+  public final long getSuperstepToKill() {
+    return serviceWorker.getGlobalStats().getSuperstepToKill();
+  }
   /**
    * Get the total (all workers) number of vertices that
    * existed in the previous superstep.
