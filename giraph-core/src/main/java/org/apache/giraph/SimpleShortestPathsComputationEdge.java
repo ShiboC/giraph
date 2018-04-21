@@ -73,7 +73,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             vertex.setValue(new DoubleWritable(Double.MAX_VALUE));
         }
         WorkerContext wc = getWorkerContext();
-        System.out.println("enter:"+wc.getSuperstepToKill());
+//        System.out.println("enter:"+wc.getSuperstepToKill());
         //set superstep to kill
         ArrayList<Long> superstepToKillList = new ArrayList<Long>();
 //        String stk=getConf().getSuperstepToKill();
