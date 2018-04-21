@@ -195,6 +195,7 @@ public class BspServiceWorker<I extends WritableComparable,
   public long checkpointStartTime = 0;
   public long checkpointEndTime = 0;
   public long computeStartTime=0;
+  public long superstepToKill=-2;
   /**
    * Constructor for setting up the worker.
    *
@@ -409,6 +410,16 @@ public class BspServiceWorker<I extends WritableComparable,
   @Override
   public MasterInfo getMasterInfo() {
     return masterInfo;
+  }
+
+  @Override
+  public long getSuperstepToKill() {
+    return superstepToKill;
+  }
+
+  @Override
+  public long setSuperstepToKill(long value) {
+    return superstepToKill=value;
   }
 
   @Override
@@ -1434,7 +1445,7 @@ else[HADOOP_NON_SECURE]*/
     checkpointEndTime=t1;
     LOG.info("Save checkpoint in " + (t1- t0) +
         " ms, using " + numThreads + " threads");//
-    System.out.println("checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1+",duration,"+(t1-t0)+",restart,"+getRestartedSuperstep()+",killsuperstep," +getConfiguration().getSuperstepToKill() );
+    System.out.println("checkpoint superstep," + getSuperstep()+ ",workerindex_" + getWorkerId(getWorkerInfo())+ ",start/end," + t0+","+t1+",duration,"+(t1-t0)+",restart,"+getRestartedSuperstep()+",killsuperstep," +superstepToKill);
 
   }
 

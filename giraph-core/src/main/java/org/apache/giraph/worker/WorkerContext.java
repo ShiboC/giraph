@@ -179,7 +179,7 @@ public abstract class WorkerContext
    * @return the superstep to kill
    */
   public final long getSuperstepToKill() {
-    return serviceWorker.getGlobalStats().getSuperstepToKill();
+    return serviceWorker.getSuperstepToKill();
   }
   /**
    * Get the total (all workers) number of vertices that

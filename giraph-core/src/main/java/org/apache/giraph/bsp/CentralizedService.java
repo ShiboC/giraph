@@ -37,45 +37,48 @@ import org.apache.hadoop.io.WritableComparable;
  */
 @SuppressWarnings("rawtypes")
 public interface CentralizedService<I extends WritableComparable,
-    V extends Writable, E extends Writable> {
-  /**
-   * Get the current global superstep of the application to work on.
-   *
-   * @return global superstep (begins at INPUT_SUPERSTEP)
-   */
-  long getSuperstep();
+        V extends Writable, E extends Writable> {
+    /**
+     * Get the current global superstep of the application to work on.
+     *
+     * @return global superstep (begins at INPUT_SUPERSTEP)
+     */
+    long getSuperstep();
 
-  /**
-   * Get the restarted superstep
-   *
-   * @return -1 if not manually restarted, otherwise the superstep id
-   */
-  long getRestartedSuperstep();
+    /**
+     * Get the restarted superstep
+     *
+     * @return -1 if not manually restarted, otherwise the superstep id
+     */
+    long getRestartedSuperstep();
 
-  /**
-   * Get list of workers
-   *
-   * @return List of workers
-   */
-  List<WorkerInfo> getWorkerInfoList();
 
-  /**
-   * Get master info
-   *
-   * @return Master info
-   */
-  MasterInfo getMasterInfo();
 
-  /**
-   * Get JobProgressTracker to report progress to
-   *
-   * @return JobProgressTrackerClient
-   */
-  JobProgressTracker getJobProgressTracker();
+    /**
+     * Get list of workers
+     *
+     * @return List of workers
+     */
+    List<WorkerInfo> getWorkerInfoList();
 
-  /**
-   * Get configuration
-   * @return configuration
-   */
-  ImmutableClassesGiraphConfiguration<I, V, E> getConfiguration();
+    /**
+     * Get master info
+     *
+     * @return Master info
+     */
+    MasterInfo getMasterInfo();
+
+    /**
+     * Get JobProgressTracker to report progress to
+     *
+     * @return JobProgressTrackerClient
+     */
+    JobProgressTracker getJobProgressTracker();
+
+    /**
+     * Get configuration
+     *
+     * @return configuration
+     */
+    ImmutableClassesGiraphConfiguration<I, V, E> getConfiguration();
 }

@@ -404,7 +404,7 @@ end[PURE_YARN]*/
             boolean hasBeenRestarted = checkSuperstepRestarted(superstep);
 
             GlobalStats globalStats = serviceWorker.getGlobalStats();
-
+            serviceWorker.setSuperstepToKill(globalStats.getSuperstepToKill());
             if (hasBeenRestarted) {
                 graphState = new GraphState(superstep,
                         finishedSuperstepStats.getVertexCount(),
@@ -438,7 +438,7 @@ end[PURE_YARN]*/
                         messageStore, numThreads);
             }
             long t1 = System.currentTimeMillis();
-            System.out.println("compute superstep," + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex() + ",start/end," + t0 + "," + t1+",duration,"+(t1-t0)+",killset," +getConf().getSuperstepToKill());
+            System.out.println("compute superstep," + superstep + ",workerindex_" + getWorkerContext().getMyWorkerIndex() + ",start/end," + t0 + "," + t1+",duration,"+(t1-t0)+",killset," +serviceWorker.getSuperstepToKill());
 
             finishedSuperstepStats = completeSuperstepAndCollectStats(
                     partitionStatsList, superstepTimerContext);

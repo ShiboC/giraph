@@ -262,4 +262,14 @@ public interface CentralizedServiceWorker<I extends WritableComparable,
    */
   void addressesAndPartitionsReceived(
       AddressesAndPartitionsWritable addressesAndPartitions);
+  /**
+   * @author Shibo Cheng
+   * get superstep to kill
+   */
+  long getSuperstepToKill();
+  /**
+   * @author Shibo Cheng
+   * get superstep to kill
+   */
+  long setSuperstepToKill(long value);
 }
