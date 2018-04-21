@@ -1067,11 +1067,11 @@ public class GiraphConfiguration extends Configuration
 
     /**
      * Check if checkpointing is used
-     *
+     *  shibo add strategy
      * @return True iff checkpointing is used
      */
     public boolean useCheckpointing() {
-        return getCheckpointFrequency() != 0;
+        return (getCheckpointStrategy()=="n")&&(getCheckpointFrequency() != 0);
     }
 
     /**

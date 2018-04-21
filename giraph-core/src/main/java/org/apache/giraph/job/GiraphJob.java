@@ -219,7 +219,8 @@ public class GiraphJob {
 
     // If the checkpoint frequency is 0 (no failure handling), set the max
     // tasks attempts to be 1 to encourage faster failure of unrecoverable jobs
-    if (giraphConfiguration.getCheckpointFrequency() == 0) {
+    //shibo add strategy
+    if (giraphConfiguration.getCheckpointFrequency() == 0&&giraphConfiguration.getCheckpointStrategy()=="n") {
       int oldMaxTaskAttempts = giraphConfiguration.getMaxTaskAttempts();
       giraphConfiguration.setMaxTaskAttempts(1);
       if (LOG.isInfoEnabled()) {
