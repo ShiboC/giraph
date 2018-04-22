@@ -18,7 +18,7 @@ under the License.
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -240,7 +240,7 @@ under the License.
                 **/comm/requests/SaslCompleteRequest.java,
                 **/comm/requests/SaslTokenMessageRequest.java,
                 **/comm/SaslConnectionTest.java
-              </excludes> 
+              </excludes>
             </configuration>
           </plugin>
         </plugins>
@@ -322,8 +322,8 @@ under the License.
       <build>
         <plugins>
           <plugin>
-              <groupId>org.sonatype.plugins</groupId>
-              <artifactId>munge-maven-plugin</artifactId>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>munge-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>
@@ -392,7 +392,7 @@ under the License.
     </profile>
 
     <profile>
-        <id>hadoop_2.0.2</id>
+      <id>hadoop_2.0.2</id>
       <build>
         <plugins>
           <plugin>
@@ -430,7 +430,7 @@ under the License.
         </plugins>
       </build>
     </profile>
- 
+
     <profile>
       <id>hadoop_trunk</id>
       <build>
@@ -583,30 +583,6 @@ under the License.
       <artifactId>freemarker</artifactId>
       <version>2.3.23</version>
       <scope>test</scope>
-    </dependency>
-      <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-yarn-common</artifactId>
-          <version>2.5.1</version>
-          <scope>test</scope>
-      </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-yarn-server-tests</artifactId>
-      <version>2.5.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-minicluster</artifactId>
-      <version>2.5.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-yarn-common</artifactId>
-      <version>2.5.1</version>
-      <scope>compile</scope>
     </dependency>
 
   </dependencies>
