@@ -1071,7 +1071,7 @@ public class GiraphConfiguration extends Configuration
      * @return True iff checkpointing is used
      */
     public boolean useCheckpointing() {
-        return (getCheckpointStrategy()=="n")&&(getCheckpointFrequency() != 0);
+        return (getCheckpointStrategy()=="d")||(getCheckpointFrequency() != 0);
     }
 
     /**
