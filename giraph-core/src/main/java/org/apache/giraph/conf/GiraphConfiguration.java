@@ -1071,8 +1071,8 @@ public class GiraphConfiguration extends Configuration
      * @return True iff checkpointing is used
      */
     public boolean useCheckpointing() {
-        System.out.println("uc:"+(getCheckpointStrategy())+(getCheckpointFrequency() != 0));
-        return (getCheckpointStrategy()=="d")||(getCheckpointFrequency() != 0);
+
+        return (getCheckpointStrategy().equals("d"))||(getCheckpointFrequency() != 0);
     }
 
     /**

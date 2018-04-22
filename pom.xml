@@ -1018,7 +1018,7 @@ under the License.
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-core</artifactId>
           <version>${hadoop.version}</version>
-          <scope>provided</scope>
+          <scope>compile</scope>
           <exclusions>
             <exclusion>
               <groupId>org.eclipse.jdt</groupId>
@@ -1070,7 +1070,7 @@ under the License.
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-core</artifactId>
           <version>${hadoop.version}</version>
-          <scope>provided</scope>
+          <scope>compile</scope>
           <exclusions>
             <exclusion>
               <groupId>org.eclipse.jdt</groupId>
@@ -1124,7 +1124,7 @@ under the License.
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-core</artifactId>
           <version>${hadoop.version}</version>
-          <scope>provided</scope>
+          <scope>compile</scope>
         </dependency>
       </dependencies>
     </profile>
@@ -1144,7 +1144,7 @@ under the License.
           <groupId>com.facebook.hadoop</groupId>
           <artifactId>hadoop-core</artifactId>
           <version>${hadoop.version}</version>
-          <scope>provided</scope>
+          <scope>compile</scope>
           <exclusions>
           </exclusions>
         </dependency>
@@ -2079,24 +2079,24 @@ under the License.
         <version>${dep.openhft-compiler.version}</version>
       </dependency>
       
-      <!-- provided dependencies. sorted lexicographically. -->
+      <!-- compile dependencies. sorted lexicographically. -->
       <dependency>
         <groupId>commons-collections</groupId>
         <artifactId>commons-collections</artifactId>
         <version>${dep.commons-collections.version}</version>
-        <scope>provided</scope>
+        <scope>compile</scope>
       </dependency>
       <dependency>
         <groupId>commons-net</groupId>
         <artifactId>commons-net</artifactId>
-        <scope>provided</scope>
+        <scope>compile</scope>
         <version>${dep.commons-net.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.accumulo</groupId>
         <artifactId>accumulo-core</artifactId>
         <version>${dep.accumulo.version}</version>
-        <scope>provided</scope>
+        <scope>compile</scope>
         <exclusions>
           <exclusion>
             <groupId>commons-logging</groupId>
@@ -2127,31 +2127,31 @@ under the License.
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-auth</artifactId>
         <version>${hadoop.version}</version>
-        <scope>provided</scope>
+        <scope>compile</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-common</artifactId>
         <version>${hadoop.version}</version>
-        <scope>provided</scope>
+        <scope>compile</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-mapreduce-client-common</artifactId>
         <version>${hadoop.version}</version>
-        <scope>provided</scope>
+        <scope>compile</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-mapreduce-client-core</artifactId>
         <version>${hadoop.version}</version>
-        <scope>provided</scope>
+        <scope>compile</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase</artifactId>
         <version>${dep.hbase.version}</version>
-        <scope>provided</scope>
+        <scope>compile</scope>
         <exclusions>
           <exclusion>
             <groupId>com.google.protobuf</groupId>
