@@ -1511,6 +1511,8 @@ public class BspServiceMaster<I extends WritableComparable,
                     String errorMessage = "******* WORKERS " + deadWorkers +
                             " FAILED *******";
                     // If checkpointing is not used, we should fail the job
+                    System.out.println("ck used"+getConfiguration().useCheckpointing());
+
                     if (!getConfiguration().useCheckpointing()) {
                         setJobStateFailed(errorMessage);
                     } else {
