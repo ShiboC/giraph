@@ -104,7 +104,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //
 //        System.out.println("wc:"+wc.getMyWorkerIndex() + ";" +wc.getSuperstep());
 //        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
-        if (wc.getSuperstepToKill() == wc.getSuperstep() && workerindexToKillList.contains(wc.getMyWorkerIndex())) {
+        if (wc.getSuperstepToKill() == wc.getSuperstep()) {
 //            superstepToKillList.remove(wc.getSuperstep());
 //            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
 //            if(!stk.contains(",")){
@@ -116,7 +116,10 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.exit(-1);
+            if (workerindexToKillList.contains(wc.getMyWorkerIndex()) ){
+
+                System.exit(-1);
+            }
         }
 
 //        System.out.println( "killset after:"+wc.superstepToKillSet);
