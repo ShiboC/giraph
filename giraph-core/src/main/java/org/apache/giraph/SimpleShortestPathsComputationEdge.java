@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Demonstrates the basic Pregel shortest paths implementation.
@@ -110,7 +111,11 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //                getConf().setSuperstepToKill("-1");
 //            }
 //                    System.out.println("after kill:"+wc.getSuperstepToKill());
-
+            try {
+                TimeUnit.SECONDS.sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.exit(-1);
         }
 
