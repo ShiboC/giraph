@@ -111,13 +111,13 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //                getConf().setSuperstepToKill("-1");
 //            }
 //                    System.out.println("after kill:"+wc.getSuperstepToKill());
-            try {
-                TimeUnit.SECONDS.sleep(30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (workerindexToKillList.contains(wc.getMyWorkerIndex()) ){
 
+            if (workerindexToKillList.contains(wc.getMyWorkerIndex()) ){
+                try {
+                    TimeUnit.SECONDS.sleep(30);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 System.exit(-1);
             }
         }
