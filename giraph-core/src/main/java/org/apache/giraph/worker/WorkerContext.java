@@ -170,9 +170,9 @@ public abstract class WorkerContext
    * shibo
    * @return restart superstep
    */
-  public final long getRestartSuperstep() {
-    return serviceWorker.getRestartedSuperstep();
-  }
+//  public final long getRestartSuperstep() {
+//    return serviceWorker.getRestartedSuperstep();
+//  }
   /**
    * Retrieves the superstep to kill.
    * shibo
@@ -180,6 +180,14 @@ public abstract class WorkerContext
    */
   public final long getSuperstepToKill() {
     return serviceWorker.getSuperstepToKill();
+  }
+  /**
+   * Retrieves the time to kill.
+   * shibo
+   * @return the time to kill
+   */
+  public final long getTimeToKill() {
+    return serviceWorker.getTimeToKill();
   }
   /**
    * Get the total (all workers) number of vertices that

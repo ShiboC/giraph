@@ -345,6 +345,13 @@ public interface GiraphConstants {
   StrConfOption SUPERSTEP_TO_KILL =
           new StrConfOption("giraph.superstepToKill", "-2",
                   "superstep to kill");
+  /** Time to kill -2 means never,
+   *  for multiple times, seperate by ','
+   * @author Shibo Cheng
+   * */
+  StrConfOption TIME_TO_KILL =
+          new StrConfOption("giraph.timeToKill", "9999999999999",
+                  "time to kill");
   /** workerindex to kill -2 means never,
    *  for multiple workers, seperate by ','
    * @author Shibo Cheng

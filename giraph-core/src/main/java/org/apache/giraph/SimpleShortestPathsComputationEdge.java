@@ -122,6 +122,24 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             }
         }
 
+        if (wc.getTimeToKill() <= System.currentTimeMillis()) {
+//            superstepToKillList.remove(wc.getSuperstep());
+//            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
+//            if(!stk.contains(",")){
+//                getConf().setSuperstepToKill("-1");
+//            }
+//                    System.out.println("after kill:"+wc.getSuperstepToKill());
+
+            if (workerindexToKillList.contains(wc.getMyWorkerIndex()) ){
+//                try {
+//                    TimeUnit.SECONDS.sleep(30);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                System.exit(-1);
+            }
+        }
+
 //        System.out.println( "killset after:"+wc.superstepToKillSet);
 
 //        long rs=wc.getRestartSuperstep();

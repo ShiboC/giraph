@@ -81,6 +81,8 @@ public class GlobalStats implements Writable {
     private long checkpointEndTime = 0;
     private long computeStartTime = 0;
     private long superstepToKill = -2;
+    private long timeToKill =Long.MAX_VALUE;
+
 
     /**
      * Add the stats of a partition to the global stats.
@@ -180,6 +182,13 @@ public class GlobalStats implements Writable {
         superstepToKill = value;
     }
 
+    public long getTimeToKill() {
+        return timeToKill;
+    }
+
+    public void setTimeToKill(long value) {
+        timeToKill = value;
+    }
 
     //end shibo
     public int getLowestGraphPercentageInMemory() {
@@ -240,6 +249,7 @@ public class GlobalStats implements Writable {
         checkpointEndTime = input.readLong();
         computeStartTime = input.readLong();
         superstepToKill = input.readLong();
+        timeToKill=input.readLong();
         lowestGraphPercentageInMemory = input.readInt();
         haltComputation = input.readBoolean();
         if (input.readBoolean()) {
@@ -262,6 +272,7 @@ public class GlobalStats implements Writable {
         output.writeLong(checkpointEndTime);
         output.writeLong(computeStartTime);
         output.writeLong(superstepToKill);
+        output.writeLong(timeToKill);
         output.writeInt(lowestGraphPercentageInMemory);
         output.writeBoolean(haltComputation);
         output.writeBoolean(checkpointStatus != null);
@@ -280,6 +291,7 @@ public class GlobalStats implements Writable {
                 ", checkpointStartTime=" + checkpointStartTime +
                 ", checkpointEndTime=" + checkpointEndTime +
                 ", computeStartTime=" + computeStartTime +
-                ", superstepToKill=" + superstepToKill + ')';
+                ", superstepToKill=" + superstepToKill +
+                ", timeToKill=" + timeToKill +')';
     }
 }

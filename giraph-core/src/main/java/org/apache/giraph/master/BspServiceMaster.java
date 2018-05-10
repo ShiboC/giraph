@@ -284,7 +284,10 @@ public class BspServiceMaster<I extends WritableComparable,
 
     private List<ComputeTimeUnit> computeTimeList = new ArrayList<ComputeTimeUnit>();
     private List<Long> checkpointTimeList = new ArrayList<Long>();
-    public String stk;
+
+    public String stk;//superstep to kill
+    public String ttk;//time to kill
+    public long stepZeroStartTime = -1;
 //    private long recoveryOverhead = 1;
 //    private List<Long> recoveryOverheadList = new ArrayList<Long>();
 //    private long recoveryOverhead=60000;
@@ -326,7 +329,7 @@ public class BspServiceMaster<I extends WritableComparable,
 
         this.checkpointFrequency = conf.getCheckpointFrequency();
         this.checkpointStrategy = conf.getCheckpointStrategy();
-        System.out.println("checkpoint strategy=" + this.checkpointStrategy + ",interval:" + this.checkpointFrequency + ",stk:" + conf.getSuperstepToKill() + ",wtk:" + conf.getWorkerindexToKill());
+        System.out.println("checkpoint strategy=" + this.checkpointStrategy + ",interval:" + this.checkpointFrequency + ",stk:" + conf.getSuperstepToKill() +",ttk:" + conf.getTimeToKill() + ",wtk:" + conf.getWorkerindexToKill());
         this.checkpointStatus = CheckpointStatus.NONE;
         this.checkpointSupportedChecker =
                 ReflectionUtils.newInstance(
@@ -1038,10 +1041,14 @@ public class BspServiceMaster<I extends WritableComparable,
                 globalStats.addMessageBytesCount(
                         workerFinishedInfoObj.getLong(
                                 JSONOBJ_NUM_MESSAGE_BYTES_KEY));
+
                 globalStats.setCheckpointStartTime(workerFinishedInfoObj.getLong("checkpointStartTime"));
                 globalStats.setCheckpointEndTime(workerFinishedInfoObj.getLong("checkpointEndTime"));
                 globalStats.setComputeStartTime(workerFinishedInfoObj.getLong("computeStartTime"));
-
+                //shibo
+                if (superstep == 0) {
+                    stepZeroStartTime = globalStats.getCheckpointStartTime();
+                }
 
                 if (conf.metricsEnabled() &&
                         workerFinishedInfoObj.has(JSONOBJ_METRICS_KEY)) {
@@ -1511,7 +1518,7 @@ public class BspServiceMaster<I extends WritableComparable,
                     String errorMessage = "******* WORKERS " + deadWorkers +
                             " FAILED *******";
                     // If checkpointing is not used, we should fail the job
-                    System.out.println("ck used"+getConfiguration().useCheckpointing());
+                    System.out.println("ck used" + getConfiguration().useCheckpointing());
 
                     if (!getConfiguration().useCheckpointing()) {
                         setJobStateFailed(errorMessage);
@@ -1676,6 +1683,7 @@ public class BspServiceMaster<I extends WritableComparable,
 //            System.out.println("before:skt:" + stk);
             if (getSuperstep() == 0) {
                 stk = getConfiguration().getSuperstepToKill();
+                ttk = getConfiguration().getTimeToKill();
             }
             if (getSuperstep() == getRestartedSuperstep()) {
 
@@ -1685,9 +1693,21 @@ public class BspServiceMaster<I extends WritableComparable,
                     stk = stk.substring(stk.indexOf(",") + 1);
 
                 }
+                if (!ttk.contains(",")) {
+                    ttk = "-2";
+                } else {
+                    ttk = ttk.substring(ttk.indexOf(",") + 1);
+
+                }
             }
-            getConfiguration().setSuperstepToKill(stk);
-            System.out.println("after:skt:" + stk);
+//            getConfiguration().setSuperstepToKill(stk);
+            if (stk != "-2") {
+                System.out.println("after:skt:" + stk);
+            }
+            if (stk != "-2") {
+                System.out.println("after:ttk:" + ttk);
+            }
+
 
 //            System.out.println(getConfiguration().getSuperstepToKill());
         }
@@ -1832,7 +1852,7 @@ public class BspServiceMaster<I extends WritableComparable,
         //shibo
         long endTime = System.currentTimeMillis();
         if (checkpointStatus != CheckpointStatus.NONE) {
-            System.out.println("superstep," + getSuperstep() + ",checkpointStart," + globalStats.getCheckpointStartTime() + ",end," + globalStats.getCheckpointEndTime() + ",duration," + (globalStats.getCheckpointEndTime() - globalStats.getCheckpointStartTime()));
+            System.out.println("superstep," + getSuperstep() + ",checkpointStart/End," + globalStats.getCheckpointStartTime() + "," + globalStats.getCheckpointEndTime() + ",duration," + (globalStats.getCheckpointEndTime() - globalStats.getCheckpointStartTime()));
         }
         if (getSuperstep() > -1) {
 //            try {
@@ -1841,7 +1861,7 @@ public class BspServiceMaster<I extends WritableComparable,
 //                } else if (getSuperstep()==) {
 //                } else {
             computeTimeList.add(new ComputeTimeUnit(getSuperstep(), getApplicationAttempt(), endTime - globalStats.getComputeStartTime()));
-            System.out.println("superstep," + getSuperstep() + ",computeStart," + globalStats.getComputeStartTime() + ",end," + endTime + ",duration," + (endTime - globalStats.getComputeStartTime()));
+            System.out.println("superstep," + getSuperstep() + ",computeStart/End," + globalStats.getComputeStartTime() + "," + endTime + ",duration," + (endTime - globalStats.getComputeStartTime()));
 //
 //            } catch (IOException e) {
 //                e.printStackTrace();
@@ -1869,11 +1889,20 @@ public class BspServiceMaster<I extends WritableComparable,
         checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
         globalStats.setCheckpointStatus(checkpointStatus);
         if (stk != null) {
-            if (stk.contains(",")) {
-                globalStats.setSuperstepToKill(Long.parseLong(stk.split(",")[0]));
+            if (stk.contains(";")) {
+                globalStats.setSuperstepToKill(Long.parseLong(stk.split(";")[0]));
 
             } else {
                 globalStats.setSuperstepToKill(Long.parseLong(stk));
+
+            }
+        }
+        if (ttk != null) {
+            if (ttk.contains(";")) {
+                globalStats.setTimeToKill(Long.parseLong(ttk.split(";")[0])+stepZeroStartTime);
+
+            } else {
+                globalStats.setTimeToKill(Long.parseLong(ttk)+stepZeroStartTime);
 
             }
         }

@@ -272,4 +272,15 @@ public interface CentralizedServiceWorker<I extends WritableComparable,
    * get superstep to kill
    */
   long setSuperstepToKill(long value);
+
+  /**
+   * @author Shibo Cheng
+   * get time to kill
+   */
+  long getTimeToKill();
+  /**
+   * @author Shibo Cheng
+   * get time to kill
+   */
+  long setTimeToKill(long value);
 }

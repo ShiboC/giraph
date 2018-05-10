@@ -96,8 +96,8 @@ end[PURE_YARN]*/
         /**superstep to kill, workerindex to kill
          *@author Shibo Cheng
          */
-        OPTIONS.addOption("stk", "superstepToKill", true, "superstep to kill, for multiple superstep, separate by , ");
-        OPTIONS.addOption("wtk", "workerindexToKill", true, "workerindex to kill, for multiple workers, separate by , ");
+//        OPTIONS.addOption("stk", "superstepToKill", true, "superstep to kill, for multiple superstep, separate by , ");
+//        OPTIONS.addOption("wtk", "workerindexToKill", true, "workerindex to kill, for multiple workers, separate by , ");
 
         OPTIONS.addOption("h", "help", false, "Help");
         OPTIONS.addOption("la", "listAlgorithms", false, "List supported " +
@@ -381,20 +381,27 @@ end[PURE_YARN]*/
                 conf.setEdgeOutputFormatSubdir(cmd.getOptionValue("esd"));
             }
         }
+
         /**
          * set superstep to kill
          * @author Shibo Cheng
          */
-        if (cmd.hasOption("stk")) {
-            conf.setSuperstepToKill(cmd.getOptionValue("stk"));
-        }
+//        if (cmd.hasOption("stk")) {
+//            conf.setSuperstepToKill(cmd.getOptionValue("stk"));
+//        }
+        /** set time to kill
+         * @author Shibo Cheng
+         */
+//        if (cmd.hasOption("ttk")) {
+//            conf.setTimeToKill(cmd.getOptionValue("ttk"));
+//        }
         /**
          * set workerindex to kill
          * @author Shibo Cheng
          */
-        if (cmd.hasOption("wtk")) {
-            conf.setWorkerindexToKill(cmd.getOptionValue("wtk"));
-        }
+//        if (cmd.hasOption("wtk")) {
+//            conf.setWorkerindexToKill(cmd.getOptionValue("wtk"));
+//        }
         /* check for path clashes */
         if (cmd.hasOption("vof") && cmd.hasOption("eof") && cmd.hasOption("op")) {
             if (!cmd.hasOption("vsd") || cmd.hasOption("esd")) {

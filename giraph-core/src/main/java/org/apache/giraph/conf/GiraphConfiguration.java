@@ -546,6 +546,23 @@ public class GiraphConfiguration extends Configuration
         return SUPERSTEP_TO_KILL.get(this);
     }
     /**
+     * Set the time to kill
+     * @author Shibo Cheng
+     *
+     * @param timeToKill
+     */
+    public final void setTimeToKill(String timeToKill) {
+        TIME_TO_KILL.set(this, timeToKill);
+    }
+    /**
+     * Get the time to kill
+     * @author Shibo Cheng
+     *
+     */
+    public final String getTimeToKill() {
+        return TIME_TO_KILL.get(this);
+    }
+    /**
      * Set the workerindex to kill
      * @author Shibo Cheng
      *
