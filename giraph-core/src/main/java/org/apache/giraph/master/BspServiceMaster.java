@@ -1704,9 +1704,10 @@ public class BspServiceMaster<I extends WritableComparable,
             if (stk != "-2") {
                 System.out.println("after:skt:" + stk);
             }
-            if (ttk != Long.toString(Long.MAX_VALUE)) {
+            if (!ttk.equals(Long.toString(Long.MAX_VALUE))) {
                 System.out.println("after:ttk:" + ttk);
             }
+
 
 
 //            System.out.println(getConfiguration().getSuperstepToKill());
@@ -1902,7 +1903,7 @@ public class BspServiceMaster<I extends WritableComparable,
             if (ttk.contains("_")) {
                 globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + stepZeroStartTime);
 
-            } else if (ttk == Long.toString(Long.MAX_VALUE)) {
+            } else if (ttk.equals( Long.toString(Long.MAX_VALUE))) {
                 globalStats.setTimeToKill(Long.parseLong(ttk));
             } else {
                 globalStats.setTimeToKill(Long.parseLong(ttk) + stepZeroStartTime);
@@ -1910,6 +1911,7 @@ public class BspServiceMaster<I extends WritableComparable,
 
 
         }
+
 
         // Let everyone know the aggregated application state through the
         // superstep finishing znode.
