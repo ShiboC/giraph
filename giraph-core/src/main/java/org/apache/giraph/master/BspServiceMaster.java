@@ -329,7 +329,7 @@ public class BspServiceMaster<I extends WritableComparable,
 
         this.checkpointFrequency = conf.getCheckpointFrequency();
         this.checkpointStrategy = conf.getCheckpointStrategy();
-        System.out.println("checkpoint strategy=" + this.checkpointStrategy + ",interval:" + this.checkpointFrequency + ",stk:" + conf.getSuperstepToKill() +",ttk:" + conf.getTimeToKill() + ",wtk:" + conf.getWorkerindexToKill());
+        System.out.println("checkpoint strategy=" + this.checkpointStrategy + ",interval:" + this.checkpointFrequency + ",stk:" + conf.getSuperstepToKill() + ",ttk:" + conf.getTimeToKill() + ",wtk:" + conf.getWorkerindexToKill());
         this.checkpointStatus = CheckpointStatus.NONE;
         this.checkpointSupportedChecker =
                 ReflectionUtils.newInstance(
@@ -1694,7 +1694,7 @@ public class BspServiceMaster<I extends WritableComparable,
 
                 }
                 if (!ttk.contains("_")) {
-                    ttk = "-2";
+                    ttk = Long.toString(Long.MAX_VALUE);
                 } else {
                     ttk = ttk.substring(ttk.indexOf("_") + 1);
 
@@ -1704,7 +1704,7 @@ public class BspServiceMaster<I extends WritableComparable,
             if (stk != "-2") {
                 System.out.println("after:skt:" + stk);
             }
-            if (stk != "-2") {
+            if (ttk != Long.toString(Long.MAX_VALUE)) {
                 System.out.println("after:ttk:" + ttk);
             }
 
@@ -1898,37 +1898,56 @@ public class BspServiceMaster<I extends WritableComparable,
             }
         }
         if (ttk != null) {
+
             if (ttk.contains("_")) {
-                globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0])+stepZeroStartTime);
+                globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + stepZeroStartTime);
 
+            } else if (ttk == Long.toString(Long.MAX_VALUE)) {
+                globalStats.setTimeToKill(Long.parseLong(ttk));
             } else {
-                globalStats.setTimeToKill(Long.parseLong(ttk)+stepZeroStartTime);
-
+                globalStats.setTimeToKill(Long.parseLong(ttk) + stepZeroStartTime);
             }
+
+
         }
+
         // Let everyone know the aggregated application state through the
         // superstep finishing znode.
         String superstepFinishedNode =
                 getSuperstepFinishedPath(getApplicationAttempt(), getSuperstep());
 
         WritableUtils.writeToZnode(
+
                 getZkExt(), superstepFinishedNode, -1, globalStats, superstepClasses);
+
         updateCounters(globalStats);
 
         cleanUpOldSuperstep(getSuperstep() - 1);
+
         incrCachedSuperstep();
         // Counter starts at zero, so no need to increment
-        if (getSuperstep() > 0) {
+        if (
+
+                getSuperstep() > 0)
+
+        {
             GiraphStats.getInstance().getSuperstepCounter().increment();
         }
+
         SuperstepState superstepState;
-        if (globalStats.getHaltComputation()) {
+        if (globalStats.getHaltComputation())
+
+        {
             superstepState = SuperstepState.ALL_SUPERSTEPS_DONE;
-        } else {
+        } else
+
+        {
             superstepState = SuperstepState.THIS_SUPERSTEP_DONE;
         }
-        globalCommHandler.getAggregatorHandler().writeAggregators(
-                getSuperstep(), superstepState);
+        globalCommHandler.getAggregatorHandler().
+
+                writeAggregators(
+                        getSuperstep(), superstepState);
 
 
         return superstepState;

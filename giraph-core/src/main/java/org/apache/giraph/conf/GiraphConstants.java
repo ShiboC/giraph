@@ -350,7 +350,7 @@ public interface GiraphConstants {
    * @author Shibo Cheng
    * */
   StrConfOption TIME_TO_KILL =
-          new StrConfOption("giraph.timeToKill", "9999999999999",
+          new StrConfOption("giraph.timeToKill", Long.toString(Long.MAX_VALUE),
                   "time to kill");
   /** workerindex to kill -2 means never,
    *  for multiple workers, seperate by ','
