@@ -1518,7 +1518,7 @@ public class BspServiceMaster<I extends WritableComparable,
                     String errorMessage = "******* WORKERS " + deadWorkers +
                             " FAILED *******";
                     // If checkpointing is not used, we should fail the job
-                    System.out.println("ck used" + getConfiguration().useCheckpointing());
+//                    System.out.println("ck used" + getConfiguration().useCheckpointing());
 
                     if (!getConfiguration().useCheckpointing()) {
                         setJobStateFailed(errorMessage);
@@ -1687,16 +1687,16 @@ public class BspServiceMaster<I extends WritableComparable,
             }
             if (getSuperstep() == getRestartedSuperstep()) {
 
-                if (!stk.contains(",")) {
+                if (!stk.contains("_")) {
                     stk = "-2";
                 } else {
-                    stk = stk.substring(stk.indexOf(",") + 1);
+                    stk = stk.substring(stk.indexOf("_") + 1);
 
                 }
-                if (!ttk.contains(",")) {
+                if (!ttk.contains("_")) {
                     ttk = "-2";
                 } else {
-                    ttk = ttk.substring(ttk.indexOf(",") + 1);
+                    ttk = ttk.substring(ttk.indexOf("_") + 1);
 
                 }
             }
@@ -1889,8 +1889,8 @@ public class BspServiceMaster<I extends WritableComparable,
         checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
         globalStats.setCheckpointStatus(checkpointStatus);
         if (stk != null) {
-            if (stk.contains(";")) {
-                globalStats.setSuperstepToKill(Long.parseLong(stk.split(";")[0]));
+            if (stk.contains("_")) {
+                globalStats.setSuperstepToKill(Long.parseLong(stk.split("_")[0]));
 
             } else {
                 globalStats.setSuperstepToKill(Long.parseLong(stk));
@@ -1898,8 +1898,8 @@ public class BspServiceMaster<I extends WritableComparable,
             }
         }
         if (ttk != null) {
-            if (ttk.contains(";")) {
-                globalStats.setTimeToKill(Long.parseLong(ttk.split(";")[0])+stepZeroStartTime);
+            if (ttk.contains("_")) {
+                globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0])+stepZeroStartTime);
 
             } else {
                 globalStats.setTimeToKill(Long.parseLong(ttk)+stepZeroStartTime);

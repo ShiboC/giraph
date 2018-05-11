@@ -104,11 +104,11 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //
 //        System.out.println("wc:"+wc.getMyWorkerIndex() + ";" +wc.getSuperstep());
 //        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
-        if(wc.getSuperstep()==7){
-            System.out.println("compute  kill:"+wc.getSuperstepToKill()+" whether kill:"+(wc.getSuperstepToKill() == wc.getSuperstep()));
-            System.out.println("compute  kill:"+wc.getMyWorkerIndex()+" whether kill:"+(workerindexToKillList.contains(wc.getMyWorkerIndex())));
-
-        }
+//        if(wc.getSuperstep()==7){
+//            System.out.println("compute  kill:"+wc.getSuperstepToKill()+" whether kill:"+(wc.getSuperstepToKill() == wc.getSuperstep()));
+//            System.out.println("compute  kill:"+wc.getMyWorkerIndex()+" whether kill:"+(workerindexToKillList.contains(wc.getMyWorkerIndex())));
+//
+//        }
         if (wc.getSuperstepToKill() == wc.getSuperstep()) {
 //            superstepToKillList.remove(wc.getSuperstep());
 //            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
@@ -117,7 +117,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //            }
 //                    System.out.println("after kill:"+wc.getSuperstepToKill());
 
-            if (workerindexToKillList.contains(wc.getMyWorkerIndex()) ){
+            if (workerindexToKillList.contains(wc.getMyWorkerIndex())) {
 //                try {
 //                    TimeUnit.SECONDS.sleep(30);
 //                } catch (InterruptedException e) {
@@ -127,14 +127,14 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             }
         }
 
-//        if (wc.getTimeToKill() <= System.currentTimeMillis()) {
-//
-//
-//            if (workerindexToKillList.contains(wc.getMyWorkerIndex()) ){
-//
-//                System.exit(-1);
-//            }
-//        }
+        if (wc.getTimeToKill() <= System.currentTimeMillis()) {
+
+
+            if (workerindexToKillList.contains(wc.getMyWorkerIndex())) {
+
+                System.exit(-1);
+            }
+        }
 
 //        System.out.println( "killset after:"+wc.superstepToKillSet);
 
