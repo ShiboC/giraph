@@ -1681,7 +1681,7 @@ public class BspServiceMaster<I extends WritableComparable,
         }
         if (getSuperstep() >= 0) {
 //            System.out.println("before:skt:" + stk);
-            if (getSuperstep() == 0) {
+            if (getSuperstep() == 0 &&getRestartedSuperstep()<0) {
                 stk = getConfiguration().getSuperstepToKill();
                 ttk = getConfiguration().getTimeToKill();
             }
