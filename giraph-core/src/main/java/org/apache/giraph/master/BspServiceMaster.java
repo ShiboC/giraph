@@ -1708,7 +1708,7 @@ public class BspServiceMaster<I extends WritableComparable,
                 System.out.println("after:ttk:" + ttk);
             }
 
-
+            LOG.info("finish deciding which time/step to kill:"+System.currentTimeMillis());
 
 //            System.out.println(getConfiguration().getSuperstepToKill());
         }
@@ -1911,9 +1911,9 @@ public class BspServiceMaster<I extends WritableComparable,
 
 
         }
+        LOG.info("finish setting time/step to kill:"+System.currentTimeMillis());
 
-
-        // Let everyone know the aggregated application state through the
+                // Let everyone know the aggregated application state through the
         // superstep finishing znode.
         String superstepFinishedNode =
                 getSuperstepFinishedPath(getApplicationAttempt(), getSuperstep());
