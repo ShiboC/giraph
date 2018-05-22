@@ -1702,10 +1702,10 @@ public class BspServiceMaster<I extends WritableComparable,
             }
 //            getConfiguration().setSuperstepToKill(stk);
             if (stk != "-2") {
-                System.out.println("after:skt:" + stk);
+                System.out.println("left superstep to kill:" + stk);
             }
             if (!ttk.equals(Long.toString(Long.MAX_VALUE))) {
-                System.out.println("after:ttk:" + ttk);
+                System.out.println("left time to kill:" + ttk);
             }
 
             LOG.info("finish deciding which time/step to kill:"+System.currentTimeMillis());
@@ -1901,12 +1901,12 @@ public class BspServiceMaster<I extends WritableComparable,
         if (ttk != null) {
 
             if (ttk.contains("_")) {
-                globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + stepZeroStartTime);
+                globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + System.currentTimeMillis());
 
             } else if (ttk.equals( Long.toString(Long.MAX_VALUE))) {
                 globalStats.setTimeToKill(Long.parseLong(ttk));
             } else {
-                globalStats.setTimeToKill(Long.parseLong(ttk) + stepZeroStartTime);
+                globalStats.setTimeToKill(Long.parseLong(ttk) + System.currentTimeMillis());
             }
 
 
