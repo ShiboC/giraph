@@ -287,7 +287,7 @@ public class BspServiceMaster<I extends WritableComparable,
 
     public String stk;//superstep to kill
     public String ttk;//time to kill
-    public long stepZeroStartTime = -1;
+    public long afterRestartTime = 0;
 //    private long recoveryOverhead = 1;
 //    private List<Long> recoveryOverheadList = new ArrayList<Long>();
 //    private long recoveryOverhead=60000;
@@ -1046,9 +1046,7 @@ public class BspServiceMaster<I extends WritableComparable,
                 globalStats.setCheckpointEndTime(workerFinishedInfoObj.getLong("checkpointEndTime"));
                 globalStats.setComputeStartTime(workerFinishedInfoObj.getLong("computeStartTime"));
                 //shibo
-                if (superstep == 0) {
-                    stepZeroStartTime = globalStats.getCheckpointStartTime();
-                }
+
 
                 if (conf.metricsEnabled() &&
                         workerFinishedInfoObj.has(JSONOBJ_METRICS_KEY)) {
@@ -1899,16 +1897,18 @@ public class BspServiceMaster<I extends WritableComparable,
             }
         }
 //        System.out.println("after superstep:"+getSuperstep());
-
-        if (ttk != null&&(getRestartedSuperstep()==getSuperstep()||getSuperstep()==0)) {
+        if(getRestartedSuperstep()==getSuperstep()||getSuperstep()==0){
+            afterRestartTime=System.currentTimeMillis();
+        }
+        if (ttk != null) {
 
             if (ttk.contains("_")) {
-                globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + System.currentTimeMillis());
+                globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + afterRestartTime);
 
             } else if (ttk.equals( Long.toString(Long.MAX_VALUE))) {
                 globalStats.setTimeToKill(Long.parseLong(ttk));
             } else {
-                globalStats.setTimeToKill(Long.parseLong(ttk) + System.currentTimeMillis());
+                globalStats.setTimeToKill(Long.parseLong(ttk) + afterRestartTime);
             }
 
 
