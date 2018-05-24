@@ -1884,7 +1884,7 @@ public class BspServiceMaster<I extends WritableComparable,
 //            }
 //        }
 //        recoveryOverhead = sumRecoveryOverhead / (recoveryOverheadList.size() + 1);
-
+//        System.out.println("before superstep:"+getSuperstep());
         //end shibo
         //Signal workers that we want to checkpoint
         checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
@@ -1898,7 +1898,9 @@ public class BspServiceMaster<I extends WritableComparable,
 
             }
         }
-        if (ttk != null) {
+//        System.out.println("after superstep:"+getSuperstep());
+
+        if (ttk != null&&(getRestartedSuperstep()==getSuperstep()||getSuperstep()==0)) {
 
             if (ttk.contains("_")) {
                 globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + System.currentTimeMillis());
