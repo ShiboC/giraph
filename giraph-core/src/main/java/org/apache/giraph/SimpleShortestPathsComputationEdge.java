@@ -94,7 +94,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //            wc.superstepToKillSet.remove(-1l);
 //        }
 
-        String[] workerindexToKillString = getConf().getWorkerindexToKill().split(",");
+        String[] workerindexToKillString = getConf().getWorkerindexToKill().split("_");
 
         for (int i = 0; i < workerindexToKillString.length; i++) {
             workerindexToKillList.add(Integer.parseInt(workerindexToKillString[i]));
