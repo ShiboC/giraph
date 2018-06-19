@@ -415,16 +415,16 @@ public class BspServiceWorker<I extends WritableComparable,
 
   @Override
   public long getSuperstepToKill() {
-    try {
-        System.out.println("last ck:"+getLastCheckpointedSuperstep());
+   //shibo try {
+    //    System.out.println("last ck:"+getLastCheckpointedSuperstep());
       if(getSuperstep()==getRestartedSuperstep()||getSuperstep()==0){
 
         superstepToKill=Long.parseLong(getConfiguration().getSuperstepToKill());
-        System.out.println("worker conf sstk:"+getConfiguration().getSuperstepToKill());
+     //   System.out.println("worker conf sstk:"+getConfiguration().getSuperstepToKill());
       }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  //  } catch (IOException e) {
+    //  e.printStackTrace();
+    //}
     return superstepToKill;
   }
 
