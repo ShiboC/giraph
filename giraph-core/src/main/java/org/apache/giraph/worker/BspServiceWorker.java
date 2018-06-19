@@ -417,11 +417,11 @@ public class BspServiceWorker<I extends WritableComparable,
   public long getSuperstepToKill() {
    //shibo try {
     //    System.out.println("last ck:"+getLastCheckpointedSuperstep());
-      if(getSuperstep()==getRestartedSuperstep()||getSuperstep()==0){
+//      if(getSuperstep()==getRestartedSuperstep()||getSuperstep()==0){
 
-        superstepToKill=Long.parseLong(getConfiguration().getSuperstepToKill());
+//        superstepToKill=Long.parseLong(getConfiguration().getSuperstepToKill());
      //   System.out.println("worker conf sstk:"+getConfiguration().getSuperstepToKill());
-      }
+//      }
   //  } catch (IOException e) {
     //  e.printStackTrace();
     //}
