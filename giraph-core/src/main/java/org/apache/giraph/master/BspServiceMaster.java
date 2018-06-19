@@ -1702,10 +1702,21 @@ public class BspServiceMaster<I extends WritableComparable,
             if (stk != "-3") {
                 System.out.println("left superstep to kill:" + stk);
             }
+
             if (!ttk.equals(Long.toString(Long.MAX_VALUE))) {
                 System.out.println("left time to kill:" + ttk);
             }
+            if (stk != null) {
+                if (stk.contains("_")) {
+                    getConfiguration().setSuperstepToKill(stk.split("_")[0]);
 
+                } else {
+                    getConfiguration().setSuperstepToKill(stk);
+
+                }
+            }
+
+            getConfiguration().setTimeToKill(ttk);
             LOG.info("finish deciding which time/step to kill:"+System.currentTimeMillis());
 
 //            System.out.println(getConfiguration().getSuperstepToKill());
