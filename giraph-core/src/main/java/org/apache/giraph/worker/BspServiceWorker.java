@@ -195,7 +195,7 @@ public class BspServiceWorker<I extends WritableComparable,
   public long checkpointStartTime = 0;
   public long checkpointEndTime = 0;
   public long computeStartTime=0;
-  public long superstepToKill=-2;
+  public long superstepToKill=getGlobalStats().getSuperstepToKill();
   public long timeToKill=-2;
   /**
    * Constructor for setting up the worker.

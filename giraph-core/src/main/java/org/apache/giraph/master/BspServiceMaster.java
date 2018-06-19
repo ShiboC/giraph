@@ -1686,7 +1686,7 @@ public class BspServiceMaster<I extends WritableComparable,
             if (getSuperstep() == getRestartedSuperstep()) {
 
                 if (!stk.contains("_")) {
-                    stk = "-2";
+                    stk = "-3";
                 } else {
                     stk = stk.substring(stk.indexOf("_") + 1);
 
@@ -1699,7 +1699,7 @@ public class BspServiceMaster<I extends WritableComparable,
                 }
             }
 //            getConfiguration().setSuperstepToKill(stk);
-            if (stk != "-2") {
+            if (stk != "-3") {
                 System.out.println("left superstep to kill:" + stk);
             }
             if (!ttk.equals(Long.toString(Long.MAX_VALUE))) {

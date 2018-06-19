@@ -406,6 +406,7 @@ end[PURE_YARN]*/
             GlobalStats globalStats = serviceWorker.getGlobalStats();
             //shibo
             serviceWorker.setSuperstepToKill(globalStats.getSuperstepToKill());
+            System.out.println("girpah task manager: superstepto kill:"+globalStats.getSuperstepToKill());
             serviceWorker.setTimeToKill(globalStats.getTimeToKill());
             if (hasBeenRestarted) {
                 graphState = new GraphState(superstep,

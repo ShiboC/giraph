@@ -343,7 +343,7 @@ public interface GiraphConstants {
    * @author Shibo Cheng
    * */
   StrConfOption SUPERSTEP_TO_KILL =
-          new StrConfOption("giraph.superstepToKill", "-2",
+          new StrConfOption("giraph.superstepToKill", "-3",
                   "superstep to kill");
   /** Time to kill -2 means never,
    *  for multiple times, seperate by ','
