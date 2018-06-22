@@ -1902,6 +1902,7 @@ else[HADOOP_NON_SECURE]*/
   @Override
   public GlobalStats getGlobalStats() {
     GlobalStats globalStats = new GlobalStats();
+    System.out.println("getsuperstep/inputs/restarts/kill:"+getSuperstep()+","+INPUT_SUPERSTEP+","+getRestartedSuperstep()+","+globalStats.getSuperstepToKill());
     if (getSuperstep() > Math.max(INPUT_SUPERSTEP, getRestartedSuperstep())) {
       String superstepFinishedNode =
           getSuperstepFinishedPath(getApplicationAttempt(),
@@ -1910,6 +1911,7 @@ else[HADOOP_NON_SECURE]*/
           getZkExt(), superstepFinishedNode, false, null,
           globalStats);
     }
+
     return globalStats;
   }
 
