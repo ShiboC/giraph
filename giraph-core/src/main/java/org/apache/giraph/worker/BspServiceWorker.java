@@ -1968,15 +1968,16 @@ else[HADOOP_NON_SECURE]*/
         if (getSuperstep() == getRestartedSuperstep()) {
 
             String superstepFinishedNode =
-                    getSuperstepFinishedPath(getApplicationAttempt(),
+                    getSuperstepFinishedPath(getApplicationAttempt()-1,
                             getSuperstep() - 1);
             WritableUtils.readFieldsFromZnode(
                     getZkExt(), superstepFinishedNode, false, null,
                     globalStatsKill);
+            globalStats.setSuperstepToKill(globalStatsKill.getSuperstepToKill());
+            globalStats.setTimeToKill(globalStatsKill.getTimeToKill());
         }
-        globalStats.setSuperstepToKill(globalStatsKill.getSuperstepToKill());
-        globalStats.setTimeToKill(globalStatsKill.getTimeToKill());
-        System.out.println("getsuperstep/inputs/restarts/kill:" + getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
+
+        System.out.println("attempt/getsuperstep/inputs/restarts/kill:" + getApplicationAttempt()+","+getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
 
         //
         return globalStats;
