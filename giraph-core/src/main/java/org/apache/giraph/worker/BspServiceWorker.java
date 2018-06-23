@@ -1955,6 +1955,9 @@ else[HADOOP_NON_SECURE]*/
     public GlobalStats getGlobalStats() {
         GlobalStats globalStats = new GlobalStats();
         GlobalStats globalStatsKill = new GlobalStats();//shibo
+        long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
+
+        System.out.println("getgl tk from conf:"+superstepToKill);
 //        System.out.println("getsuperstep/inputs/restarts/kill:" + getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
         if (getSuperstep() > Math.max(INPUT_SUPERSTEP, getRestartedSuperstep())) {
             String superstepFinishedNode =
@@ -1966,14 +1969,13 @@ else[HADOOP_NON_SECURE]*/
         }
         //shibo
         if (getSuperstep() == getRestartedSuperstep()) {
-
             String superstepFinishedNode =
                     getSuperstepFinishedPath(getApplicationAttempt()-1,
-                            getSuperstep() - 1);
+                            getSuperstep());
             WritableUtils.readFieldsFromZnode(
                     getZkExt(), superstepFinishedNode, false, null,
                     globalStatsKill);
-            globalStats.setSuperstepToKill(globalStatsKill.getSuperstepToKill());
+            globalStats.setSuperstepToKill(superstepToKill);
             globalStats.setTimeToKill(globalStatsKill.getTimeToKill());
         }
 

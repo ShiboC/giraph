@@ -109,6 +109,8 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
 //            System.out.println("compute  kill:"+wc.getMyWorkerIndex()+" whether kill:"+(workerindexToKillList.contains(wc.getMyWorkerIndex())));
 //
 //        }
+//        wc.getContext().getTaskAttemptID();
+
         if (wc.getSuperstepToKill() == wc.getSuperstep()) {
 //            superstepToKillList.remove(wc.getSuperstep());
 //            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
