@@ -1954,8 +1954,9 @@ else[HADOOP_NON_SECURE]*/
     //shibo
     public GlobalStats getGlobalStats() {
         GlobalStats globalStats = new GlobalStats();
-        GlobalStats globalStatsKill = new GlobalStats();//shibo
+//        GlobalStats globalStatsKill = new GlobalStats();//shibo
         long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
+//        long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
 
         System.out.println("getgl tk from conf:"+superstepToKill);
 //        System.out.println("getsuperstep/inputs/restarts/kill:" + getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
@@ -1968,17 +1969,17 @@ else[HADOOP_NON_SECURE]*/
                     globalStats);
         }
         //shibo
-        if (getSuperstep() == getRestartedSuperstep()) {
-            String superstepFinishedNode =
-                    getSuperstepFinishedPath(getApplicationAttempt()-1,
-                            getSuperstep());
-            WritableUtils.readFieldsFromZnode(
-                    getZkExt(), superstepFinishedNode, false, null,
-                    globalStatsKill);
-            globalStats.setSuperstepToKill(superstepToKill);
-            globalStats.setTimeToKill(globalStatsKill.getTimeToKill());
-        }
+//        if (getSuperstep() == getRestartedSuperstep()) {
+//            String superstepFinishedNode =
+//                    getSuperstepFinishedPath(getApplicationAttempt()-1,
+//                            getSuperstep());
+//            WritableUtils.readFieldsFromZnode(
+//                    getZkExt(), superstepFinishedNode, false, null,
+//                    globalStatsKill);
+//            globalStats.setTimeToKill(globalStatsKill.getTimeToKill());
+//        }
 
+        globalStats.setSuperstepToKill(superstepToKill);
         System.out.println("attempt/getsuperstep/inputs/restarts/kill:" + getApplicationAttempt()+","+getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
 
         //
