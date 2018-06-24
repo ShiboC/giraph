@@ -1955,7 +1955,12 @@ else[HADOOP_NON_SECURE]*/
     public GlobalStats getGlobalStats() {
         GlobalStats globalStats = new GlobalStats();
 //        GlobalStats globalStatsKill = new GlobalStats();//shibo
-        long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
+        String[] stk=getConfiguration().getSuperstepToKill().split("_");
+        long superstepToKill= -2;
+
+        if((int)getApplicationAttempt()<stk.length){
+            superstepToKill=Long.parseLong(stk[(int)getApplicationAttempt()]);
+        }
 //        long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
 
 //        System.out.println("getgl tk from conf:"+superstepToKill);
