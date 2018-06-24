@@ -1958,7 +1958,7 @@ else[HADOOP_NON_SECURE]*/
         long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
 //        long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
 
-        System.out.println("getgl tk from conf:"+superstepToKill);
+//        System.out.println("getgl tk from conf:"+superstepToKill);
 //        System.out.println("getsuperstep/inputs/restarts/kill:" + getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
         if (getSuperstep() > Math.max(INPUT_SUPERSTEP, getRestartedSuperstep())) {
             String superstepFinishedNode =
@@ -1980,7 +1980,7 @@ else[HADOOP_NON_SECURE]*/
 //        }
 
         globalStats.setSuperstepToKill(superstepToKill);
-        System.out.println("attempt/getsuperstep/inputs/restarts/kill:" + getApplicationAttempt()+","+getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
+//        System.out.println("attempt/getsuperstep/inputs/restarts/kill:" + getApplicationAttempt()+","+getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
 
         //
         return globalStats;

@@ -285,7 +285,7 @@ public class BspServiceMaster<I extends WritableComparable,
     private List<ComputeTimeUnit> computeTimeList = new ArrayList<ComputeTimeUnit>();
     private List<Long> checkpointTimeList = new ArrayList<Long>();
 
-    public String stk;//superstep to kill
+//    public String stk;//superstep to kill
     public String ttk;//time to kill
     public long afterRestartTime = 0;
 //    private long recoveryOverhead = 1;
@@ -1680,17 +1680,17 @@ public class BspServiceMaster<I extends WritableComparable,
         if (getSuperstep() >= 0) {
 //            System.out.println("before:skt:" + stk);
             if (getSuperstep() == 0 &&getRestartedSuperstep()<0) {
-                stk = getConfiguration().getSuperstepToKill();
+//                stk = getConfiguration().getSuperstepToKill();
                 ttk = getConfiguration().getTimeToKill();
             }
             if (getSuperstep() == getRestartedSuperstep()) {
 
-                if (!stk.contains("_")) {
-                    stk = "-3";
-                } else {
-                    stk = stk.substring(stk.indexOf("_") + 1);
-
-                }
+//                if (!stk.contains("_")) {
+//                    stk = "-3";
+//                } else {
+//                    stk = stk.substring(stk.indexOf("_") + 1);
+//
+//                }
                 if (!ttk.contains("_")) {
                     ttk = Long.toString(Long.MAX_VALUE);
                 } else {
@@ -1699,9 +1699,9 @@ public class BspServiceMaster<I extends WritableComparable,
                 }
             }
 //            getConfiguration().setSuperstepToKill(stk);
-            if (stk != "-3") {
-                System.out.println("left superstep to kill:" + stk);
-            }
+//            if (stk != "-3") {
+//                System.out.println("left superstep to kill:" + stk);
+//            }
 
             if (!ttk.equals(Long.toString(Long.MAX_VALUE))) {
                 System.out.println("left time to kill:" + ttk);
@@ -1898,15 +1898,15 @@ public class BspServiceMaster<I extends WritableComparable,
         //Signal workers that we want to checkpoint
         checkpointStatus = getCheckpointStatus(getSuperstep() + 1);
         globalStats.setCheckpointStatus(checkpointStatus);
-        if (stk != null) {
-            if (stk.contains("_")) {
-                globalStats.setSuperstepToKill(Long.parseLong(stk.split("_")[0]));
-
-            } else {
-                globalStats.setSuperstepToKill(Long.parseLong(stk));
-
-            }
-        }
+//        if (stk != null) {
+//            if (stk.contains("_")) {
+//                globalStats.setSuperstepToKill(Long.parseLong(stk.split("_")[0]));
+//
+//            } else {
+//                globalStats.setSuperstepToKill(Long.parseLong(stk));
+//
+//            }
+//        }
 //        System.out.println("after superstep:"+getSuperstep());
         if(getRestartedSuperstep()==getSuperstep()||getSuperstep()==0){
             afterRestartTime=System.currentTimeMillis();
@@ -1933,7 +1933,7 @@ public class BspServiceMaster<I extends WritableComparable,
         WritableUtils.writeToZnode(
 
                 getZkExt(), superstepFinishedNode, -1, globalStats, superstepClasses);
-        System.out.println("master:finish writing gl kill:"+globalStats.getSuperstepToKill());
+//        System.out.println("master:finish writing gl kill:"+globalStats.getSuperstepToKill());
 
         updateCounters(globalStats);
 
