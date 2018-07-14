@@ -285,7 +285,7 @@ public class BspServiceMaster<I extends WritableComparable,
     private List<ComputeTimeUnit> computeTimeList = new ArrayList<ComputeTimeUnit>();
     private List<Long> checkpointTimeList = new ArrayList<Long>();
 
-//    public String stk;//superstep to kill
+    //    public String stk;//superstep to kill
     public String ttk;//time to kill
     public long afterRestartTime = 0;
 //    private long recoveryOverhead = 1;
@@ -1679,7 +1679,7 @@ public class BspServiceMaster<I extends WritableComparable,
         }
         if (getSuperstep() >= 0) {
 //            System.out.println("before:skt:" + stk);
-            if (getSuperstep() == 0 &&getRestartedSuperstep()<0) {
+            if (getSuperstep() == 0 && getRestartedSuperstep() < 0) {
 //                stk = getConfiguration().getSuperstepToKill();
                 ttk = getConfiguration().getTimeToKill();
             }
@@ -1717,7 +1717,7 @@ public class BspServiceMaster<I extends WritableComparable,
 //            }
 //
 //            getConfiguration().setTimeToKill(ttk);
-            LOG.info("finish deciding which time/step to kill:"+System.currentTimeMillis());
+            LOG.info("finish deciding which time/step to kill:" + System.currentTimeMillis());
 
 //            System.out.println(getConfiguration().getSuperstepToKill());
         }
@@ -1871,7 +1871,10 @@ public class BspServiceMaster<I extends WritableComparable,
 //                } else if (getSuperstep()==) {
 //                } else {
             computeTimeList.add(new ComputeTimeUnit(getSuperstep(), getApplicationAttempt(), endTime - globalStats.getComputeStartTime()));
-            System.out.println("superstep," + getSuperstep() + ",computeStart/End," + globalStats.getComputeStartTime() + "," + endTime + ",duration," + (endTime - globalStats.getComputeStartTime()));
+            System.out.println("superstep," + getSuperstep() + ",computeStart/End," + globalStats.getComputeStartTime() + "," + endTime
+                    + ",duration," + (endTime - globalStats.getComputeStartTime()) + ",vertexCount," + globalStats.getVertexCount()
+                    + ",finishVertex," + globalStats.getFinishedVertexCount() + ",edgeCount," + globalStats.getEdgeCount()
+            +",messageCount,"+globalStats.getMessageCount());
 //
 //            } catch (IOException e) {
 //                e.printStackTrace();
@@ -1908,15 +1911,15 @@ public class BspServiceMaster<I extends WritableComparable,
 //            }
 //        }
 //        System.out.println("after superstep:"+getSuperstep());
-        if(getRestartedSuperstep()==getSuperstep()||getSuperstep()==0){
-            afterRestartTime=System.currentTimeMillis();
+        if (getRestartedSuperstep() == getSuperstep() || getSuperstep() == 0) {
+            afterRestartTime = System.currentTimeMillis();
         }
         if (ttk != null) {
 
             if (ttk.contains("_")) {
                 globalStats.setTimeToKill(Long.parseLong(ttk.split("_")[0]) + afterRestartTime);
 
-            } else if (ttk.equals( Long.toString(Long.MAX_VALUE))) {
+            } else if (ttk.equals(Long.toString(Long.MAX_VALUE))) {
                 globalStats.setTimeToKill(Long.parseLong(ttk));
             } else {
                 globalStats.setTimeToKill(Long.parseLong(ttk) + afterRestartTime);
@@ -1924,9 +1927,9 @@ public class BspServiceMaster<I extends WritableComparable,
 
 
         }
-        LOG.info("finish setting time/step to kill:"+System.currentTimeMillis());
+        LOG.info("finish setting time/step to kill:" + System.currentTimeMillis());
 
-                // Let everyone know the aggregated application state through the
+        // Let everyone know the aggregated application state through the
         // superstep finishing znode.
         String superstepFinishedNode =
                 getSuperstepFinishedPath(getApplicationAttempt(), getSuperstep());
