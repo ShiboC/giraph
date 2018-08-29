@@ -139,7 +139,8 @@ public class GlobalStats implements Writable {
         this.checkpointStatus = checkpointStatus;
     }
 
-    //get and set methods for checkpoint starttime and endtime, compute Starttime
+    //get and set methods for checkpoint starttime and endtime, compute Starttime, SuperstepToKill, TimeToKill
+    // and add their corresponding readFields, write, toString method.
     public long getCheckpointStartTime() {
         return checkpointStartTime;
     }
@@ -190,7 +191,7 @@ public class GlobalStats implements Writable {
         timeToKill = value;
     }
 
-    //end shibo
+
     public int getLowestGraphPercentageInMemory() {
         return lowestGraphPercentageInMemory;
     }

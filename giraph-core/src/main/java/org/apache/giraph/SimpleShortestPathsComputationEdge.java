@@ -74,57 +74,22 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             vertex.setValue(new DoubleWritable(Double.MAX_VALUE));
         }
         WorkerContext wc = getWorkerContext();
-//        System.out.println("enter:"+wc.getSuperstepToKill());
         //set superstep to kill
         ArrayList<Long> superstepToKillList = new ArrayList<Long>();
-//        String stk=getConf().getSuperstepToKill();
-//        String[] superstepToKillString = stk.split(",");
-//        wc.superstepToKillSet.clear();
-//        System.out.println("atempt:"+getContext().getTaskAttemptID().getId());
-//        for (int i = 0; i < superstepToKillString.length; i++) {
-//            superstepToKillList.add(Long.parseLong(superstepToKillString[i]));
-//        }
 
-//        System.out.println("stklist before kill:"+superstepToKillList.toString());
-        //set workerindex to kill
+
         ArrayList<Integer> workerindexToKillList = new ArrayList<Integer>();
-//        System.out.println("wc stkset:"+wc.getSuperstepToKill());
-//        if (wc.superstepToKillSet.contains(-1l)) {
-//
-//            wc.superstepToKillSet.remove(-1l);
-//        }
 
         String[] workerindexToKillString = getConf().getWorkerindexToKill().split("_");
 
         for (int i = 0; i < workerindexToKillString.length; i++) {
             workerindexToKillList.add(Integer.parseInt(workerindexToKillString[i]));
         }
-//        System.out.println( "wcstk kill before:"+wc.getSuperstepToKill());
-//        System.out.println( "kill index set before:"+workerindexToKillList.toString());
-//
-//        System.out.println("wc:"+wc.getMyWorkerIndex() + ";" +wc.getSuperstep());
-//        System.out.println("attemp id .id: "+getContext().getTaskAttemptID()+";"+getContext().getTaskAttemptID().getId());
-//        if(wc.getSuperstep()==7){
-//            System.out.println("compute  kill:"+wc.getSuperstepToKill()+" whether kill:"+(wc.getSuperstepToKill() == wc.getSuperstep()));
-//            System.out.println("compute  kill:"+wc.getMyWorkerIndex()+" whether kill:"+(workerindexToKillList.contains(wc.getMyWorkerIndex())));
-//
-//        }
-//        wc.getContext().getTaskAttemptID();
+
 
         if (wc.getSuperstepToKill() == wc.getSuperstep()) {
-//            superstepToKillList.remove(wc.getSuperstep());
-//            getConf().setSuperstepToKill(stk.substring(stk.indexOf(",")+1));
-//            if(!stk.contains(",")){
-//                getConf().setSuperstepToKill("-1");
-//            }
-//                    System.out.println("after kill:"+wc.getSuperstepToKill());
 
             if (workerindexToKillList.contains(wc.getMyWorkerIndex())) {
-//                try {
-//                    TimeUnit.SECONDS.sleep(30);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
                 System.exit(-1);
             }
         }
@@ -138,10 +103,7 @@ public class SimpleShortestPathsComputationEdge extends BasicComputation<
             }
         }
 
-//        System.out.println( "killset after:"+wc.superstepToKillSet);
 
-//        long rs=wc.getRestartSuperstep();
-//        System.out.println("restartsuperstep:"+rs);
         double minDist = isSource(vertex) ? 0d : Double.MAX_VALUE;
         for (DoubleWritable message : messages) {
             minDist = Math.min(minDist, message.get());

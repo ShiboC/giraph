@@ -136,7 +136,6 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
 
 
                         long cachedSuperstep = bspServiceMaster.getSuperstep();
-//                        System.out.println("master,"+bspServiceMaster.getMasterInfo().getHostname()+",start superstep "+cachedSuperstep);
                         GiraphMetrics.get().resetSuperstepMetrics(cachedSuperstep);
                         Class<? extends Computation> computationClass =
                                 bspServiceMaster.getMasterCompute().getComputation();
@@ -155,6 +154,7 @@ public class MasterThread<I extends WritableComparable, V extends Writable,
                                     " and is now on superstep " +
                                     bspServiceMaster.getSuperstep());
                         }
+                        //@author Shibo Cheng. output the total time of an iteration.
                         System.out.println("coordination of superstep," + cachedSuperstep + ",start/end," + startSuperstepMillis + "," + endSuperstepMillis+",duration,"+(endSuperstepMillis-startSuperstepMillis));
 
                         if (superstepCounterOn) {

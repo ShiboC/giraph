@@ -47,14 +47,7 @@ public abstract class WorkerContext
   /** All workers info */
   private AllWorkersInfo allWorkersInfo;
 
-  //set superstep to kill
-  //shibo
-//  public HashSet<Long> superstepToKillSet=new HashSet<Long>(Arrays.asList(-1l));
-  /**
-   * Set the graph state.
-   *
-   * @param graphState Used to set the graph state.
-   */
+
   public final void setGraphState(GraphState graphState) {
     this.graphState = graphState;
   }
@@ -166,16 +159,8 @@ public abstract class WorkerContext
     return graphState.getSuperstep();
   }
   /**
-   * Retrieves the restart superstep.
-   * shibo
-   * @return restart superstep
-   */
-//  public final long getRestartSuperstep() {
-//    return serviceWorker.getRestartedSuperstep();
-//  }
-  /**
    * Retrieves the superstep to kill.
-   * shibo
+   * @author Shibo Cheng
    * @return the superstep to kill
    */
   public final long getSuperstepToKill() {
@@ -183,7 +168,7 @@ public abstract class WorkerContext
   }
   /**
    * Retrieves the time to kill.
-   * shibo
+   * @author Shibo Cheng
    * @return the time to kill
    */
   public final long getTimeToKill() {

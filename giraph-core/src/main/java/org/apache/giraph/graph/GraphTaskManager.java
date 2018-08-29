@@ -433,9 +433,11 @@ end[PURE_YARN]*/
                         numComputeThreads + " thread(s) on superstep " + superstep);
             }
             partitionStatsList.clear();
-            // execute the current superstep
+            //@author: Shibo Cheng
+            //record the earliest computeStartTime
             long t0 = System.currentTimeMillis();
             serviceWorker.setComputeStartTime(t0);
+            // execute the current superstep
 
             if (numPartitions > 0) {
                 processGraphPartitions(context, partitionStatsList, graphState,

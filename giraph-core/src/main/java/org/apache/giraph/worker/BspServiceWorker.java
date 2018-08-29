@@ -462,16 +462,6 @@ public class BspServiceWorker<I extends WritableComparable,
 
     @Override
     public long getSuperstepToKill() {
-        //shibo try {
-        //    System.out.println("last ck:"+getLastCheckpointedSuperstep());
-//      if(getSuperstep()==getRestartedSuperstep()||getSuperstep()==0){
-
-//        superstepToKill=Long.parseLong(getConfiguration().getSuperstepToKill());
-        //   System.out.println("worker conf sstk:"+getConfiguration().getSuperstepToKill());
-//      }
-        //  } catch (IOException e) {
-        //  e.printStackTrace();
-        //}
         return superstepToKill;
     }
 
@@ -1004,7 +994,8 @@ else[HADOOP_NON_SECURE]*/
                     workerSentMessageBytes);
             workerFinishedInfoObj.put(JSONOBJ_METRICS_KEY,
                     Base64.encodeBytes(metricsBytes));
-            //store checkpoint starttime and endtime to znode
+            //@author Shibo Cheng.
+            // store checkpoint starttime and endtime to znode
             workerFinishedInfoObj.put("checkpointStartTime", checkpointStartTime);
             workerFinishedInfoObj.put("checkpointEndTime", checkpointEndTime);
             workerFinishedInfoObj.put("computeStartTime", computeStartTime);
@@ -1513,6 +1504,8 @@ else[HADOOP_NON_SECURE]*/
         ProgressableUtils.getResultsWithNCallables(callableFactory, numThreads,
                 "checkpoint-vertices-%d", getContext());
         Long t1 = System.currentTimeMillis();
+        //@author shibo cheng
+        //output checkpoint time
         checkpointEndTime = t1;
         LOG.info("Save checkpoint in " + (t1 - t0) +
                 " ms, using " + numThreads + " threads");//
@@ -1866,6 +1859,8 @@ else[HADOOP_NON_SECURE]*/
         return workerInfo;
     }
 
+    //@author: Shibo Cheng
+    //record the earliest computeStartTime
     @Override
     public void setComputeStartTime(long value) {
         if (computeStartTime == 0) {
@@ -1951,21 +1946,18 @@ else[HADOOP_NON_SECURE]*/
     }
 
     @Override
-    //shibo
+
     public GlobalStats getGlobalStats() {
         GlobalStats globalStats = new GlobalStats();
-//        GlobalStats globalStatsKill = new GlobalStats();//shibo
+        //@author: Shibo Cheng
+        //obtain the next superstep to kill.
         String[] stk=getConfiguration().getSuperstepToKill().split("_");
         long superstepToKill= -2;
 
         if((int)getApplicationAttempt()<stk.length){
             superstepToKill=Long.parseLong(stk[(int)getApplicationAttempt()]);
         }
-//        long superstepToKill= Long.parseLong(getConfiguration().getSuperstepToKill().split("_")[(int)getApplicationAttempt()]);
-
-//        System.out.println("getgl tk from conf:"+superstepToKill);
-//        System.out.println("getsuperstep/inputs/restarts/kill:" + getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
-        if (getSuperstep() > Math.max(INPUT_SUPERSTEP, getRestartedSuperstep())) {
+       if (getSuperstep() > Math.max(INPUT_SUPERSTEP, getRestartedSuperstep())) {
             String superstepFinishedNode =
                     getSuperstepFinishedPath(getApplicationAttempt(),
                             getSuperstep() - 1);
@@ -1973,21 +1965,10 @@ else[HADOOP_NON_SECURE]*/
                     getZkExt(), superstepFinishedNode, false, null,
                     globalStats);
         }
-        //shibo
-//        if (getSuperstep() == getRestartedSuperstep()) {
-//            String superstepFinishedNode =
-//                    getSuperstepFinishedPath(getApplicationAttempt()-1,
-//                            getSuperstep());
-//            WritableUtils.readFieldsFromZnode(
-//                    getZkExt(), superstepFinishedNode, false, null,
-//                    globalStatsKill);
-//            globalStats.setTimeToKill(globalStatsKill.getTimeToKill());
-//        }
+
 
         globalStats.setSuperstepToKill(superstepToKill);
-//        System.out.println("attempt/getsuperstep/inputs/restarts/kill:" + getApplicationAttempt()+","+getSuperstep() + "," + INPUT_SUPERSTEP + "," + getRestartedSuperstep() + "," + globalStats.getSuperstepToKill());
 
-        //
         return globalStats;
     }
 
