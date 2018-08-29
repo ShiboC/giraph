@@ -1,0 +1,79 @@
+##Master Thesis.
+##Title: Dynamic Checkpointing for Non-Stationary Graph Algorithms on Distributed Dataflow
+##Candidate: Shibo Cheng
+##Advisor: Chen Xu
+
+##Short Abstract: Current popular graph processing frameworks like Pregel and Giraph utilize checkpoint-based fault tolerance, that is, checkpoint in a static superstep interval. However, this static checkpointing strategy is inefficient for non-stationary graph algorithms whose computing cost of each superstep is changeable. To solve this problem, we study various checkpointing techniques and find out dynamic checkpointing is suitable for non-stationary graph algorithm. It can change checkpointing interval dynamically based on checkpointing cost and changeable computing cost. We implement dynamic checkpointing in Giraph and evaluate its performance in comparison with static checkpointing.
+
+##Implementation in Giraph: The class changed in my implementation of Giraph is as below, people can also check my work in the code by searching '@author Shibo Cheng':
+GiraphConfiguration
+	String getSuperstepToKill();
+	String getTimeToKill();
+	String getWorkerindexToKill();
+	String getCheckpointStrategy();
+
+GiraphConstants
+	StrConfOption SUPERSTEP_TO_KILL;
+	StrConfOption TIME_TO_KILL;
+	StrConfOption WORKERINDEX_TO_KILL;
+	StrConfOption CHECKPOINT_STRATEGY;
+  
+SimpleShortestPathsComputationEdge
+
+GlobalStats
+	long checkpointStartTime = 0;
+	long checkpointEndTime = 0;
+	long computeStartTime = 0;
+	void readFields(DataInput input)
+	void write(DataOutput output)
+	long getCheckpointStartTime()
+	void setCheckpointStartTime(long value) 
+	long getComputeStartTime()
+	void setComputeStartTime(long value)
+	long getCheckpointEndTime()
+	void setCheckpointEndTime(long value)
+	long superstepToKill = -2;
+  long timeToKill =Long.MAX_VALUE;
+  long getSuperstepToKill()
+  void setSuperstepToKill(long value)
+  long getTimeToKill()
+  void setTimeToKill(long value)
+  
+BspServiceWorker
+	void setComputeStartTime(long value)
+	void storeCheckpointVertices()
+	void writeFinshedSuperstepInfoToZK(
+			List<PartitionStats> partitionStatsList, long workerSentMessages,
+            long workerSentMessageBytes) 
+	workerFinishedInfoObj.put("checkpointStartTime", checkpointStartTime);
+
+WorkerContext
+	long getSuperstepToKill();
+	long getTimeToKill();
+
+GraphTaskManager
+	void execute() 
+
+BspServiceMaster
+	ComputeTimeUnit(long superstep, long attempt, long time)
+	List<ComputeTimeUnit> computeTimeList
+	List<Long> checkpointTimeList
+	SuperstepState coordinateSuperstep()
+	GlobalStats aggregateWorkerStats(long superstep)
+	CheckpointStatus getCheckpointStatus(long superstep)
+
+##Quick Start:
+Apache Giraph already provide a detailed guide in http://giraph.apache.org/quick_start.html. They also provide useful information in their README in this directory. Since we work on the top of Giraph 1.3.0, people need to specify the profiles to hadoop_2 when maven the job(add option '--Phadoop_2').
+
+After mvn the job, start the hadoop2.5.1, people can run the experiment with following command in DIMA cluster:
+/share/hadoop/shibo/hadoop-2.5.1/bin/hadoop jar /share/hadoop/shibo/giraph/giraph-core/target/giraph-1.3.0-SNAPSHOT-for-hadoop-2.5.1-jar-with-dependencies.jar org.apache.giraph.GiraphRunner org.apache.giraph.SimpleShortestPathsComputationEdge  -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat -eip /input/uk-2002.txt -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat -op /output/uks5s7-19 -w 5  -ca giraph.checkpointStrategy=s -ca giraph.eventWaitMsecs=30000  -ca giraph.zKMinSessionTimeout=60000 -ca giraph.zKMaxSessionTimeout=60000  -ca giraph.maxMasterSuperstepWaitMsecs=30000 -ca giraph.maxRequestMilliseconds=30000  -ca giraph.checkpointFrequency=5  -ca giraph.workerIndexToKill=1 -ca giraph.superstepToKill=7_19 
+
+Most of the parameters are explained in Giraph quick start and option(http://giraph.apache.org/options.html). 
+For quick restart in Giraph, we add the following options"-ca giraph.eventWaitMsecs=30000  -ca giraph.zKMinSessionTimeout=60000 -ca giraph.zKMaxSessionTimeout=60000  -ca giraph.maxMasterSuperstepWaitMsecs=30000 -ca giraph.maxRequestMilliseconds=30000", so Giraph can detect failure faster. 
+For our new added dynamic checkpoint strategy, we add new option "-ca giraph.checkpointStrategy". We have three options:s=the default static checkpointing, d=dynamic checkpointing, n=no checkpointing. 
+For simulatation of failure, we add three options:
+  -ca giraph.workerIndexToKill: set up the worker index to fail, e.g. giraph.workerIndexToKill=1_2, means, the job fails two workers with index equals to 1 or 2.
+  -ca giraph.superstepToKill: set up superstep to fail, e.g. giraph.superstepToKill=7_19, means, the job fails at superstep 7 and 19.
+  -ca giraph.timeToKill: set up time interval to fail, e.g. giraph.timeToKill=50000_5000_5000, means, the job fails after 50 seconds when it starts, then fail twice every 5 seconds after restarting.
+People only need to configure 1 of the 2 killing manners, either by superstep or by time, but workerIndexToKill must be configured to enable failure.
+ 
