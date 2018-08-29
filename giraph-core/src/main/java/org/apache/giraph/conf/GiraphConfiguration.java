@@ -528,15 +528,7 @@ public class GiraphConfiguration extends Configuration
         EDGE_OUTPUT_FORMAT_SUBDIR.set(this, path);
     }
 
-    /**
-     * Set the superstep to kill
-     * @author Shibo Cheng
-     *
-     * @param superstepToKill
-     */
-    public final void setSuperstepToKill(String superstepToKill) {
-        SUPERSTEP_TO_KILL.set(this, superstepToKill);
-    }
+
     /**
      * Get the superstep to kill
      * @author Shibo Cheng
@@ -545,15 +537,7 @@ public class GiraphConfiguration extends Configuration
     public final String getSuperstepToKill() {
         return SUPERSTEP_TO_KILL.get(this);
     }
-    /**
-     * Set the time to kill
-     * @author Shibo Cheng
-     *
-     * @param timeToKill
-     */
-    public final void setTimeToKill(String timeToKill) {
-        TIME_TO_KILL.set(this, timeToKill);
-    }
+
     /**
      * Get the time to kill
      * @author Shibo Cheng
@@ -562,15 +546,7 @@ public class GiraphConfiguration extends Configuration
     public final String getTimeToKill() {
         return TIME_TO_KILL.get(this);
     }
-    /**
-     * Set the workerindex to kill
-     * @author Shibo Cheng
-     *
-     * @param workerindexToKill
-     */
-    public final void setWorkerindexToKill(String workerindexToKill) {
-        WORKERINDEX_TO_KILL.set(this, workerindexToKill);
-    }
+
     /**
      * Get the workerindex to kill
      * @author Shibo Cheng
